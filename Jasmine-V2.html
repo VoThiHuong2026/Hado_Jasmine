@@ -369,6 +369,8 @@ details[open] .tl-sum::after{transform:rotate(180deg);}
 .timeline .tl-i{flex-wrap:nowrap!important;align-items:flex-start!important;}
 .timeline .tl-lab{min-width:0!important;}
 .timeline .tl-c{flex:1 1 auto;min-width:0;}
+.sortmob{display:none;}
+@media(max-width:819px){ .sortmob{display:inline;} .sortnote{display:none;} }
 </style>
 </head>
 <body>
@@ -408,7 +410,7 @@ details[open] .tl-sum::after{transform:rotate(180deg);}
   </div>
 
   <div class="panel">
-    <h2>Các vấn đề cư dân đang quan tâm</h2>
+    <h2>Các vấn đề cư dân đang quan tâm<span class="sortmob"> (Cao → Thấp)</span></h2>
     <div class="sortnote"><span class="b"></span> Xếp theo <b>&nbsp;lượt Đồng ý&nbsp;</b> (cao → thấp). Mỗi lượt bình chọn cần xác thực bằng mã OTP.</div>
     <div class="catwrap">
       <label class="catlbl" for="catSelect">Lọc theo nhóm vấn đề</label>
