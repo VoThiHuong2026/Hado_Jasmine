@@ -248,12 +248,80 @@ footer b{color:var(--ink-soft);}
 .fin-docs{border:1px dashed #e4dece;border-radius:12px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
 .fin-docs .fd-h{font-weight:700;color:#1c5138;font-size:13.5px;width:100%;margin-bottom:2px;}
 .fin-docs .fd{display:inline-flex;align-items:center;gap:6px;background:#f6f4ee;border:1px solid #e4dece;border-radius:9px;padding:9px 13px;font-size:13px;color:#1c5138;}
+
+/* ============ V3 · Mobile-first, elderly-first redesign ============ */
+html{scroll-behavior:smooth;}
+body{font-size:17px;line-height:1.65;}
+.wrap{padding:14px 14px 116px;max-width:900px;margin:0 auto;}
+header .head-in{max-width:900px;margin:0 auto;padding:20px 16px 22px;position:relative;}
+header h1{font-size:clamp(25px,6.4vw,36px);line-height:1.18;}
+header .lede{font-size:16px;color:#3c423f;}
+.textsize{position:absolute;top:10px;right:12px;display:flex;align-items:center;gap:7px;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:5px 8px;box-shadow:0 3px 10px rgba(28,81,56,.08);z-index:5;}
+.textsize button{font-family:inherit;font-weight:800;font-size:15px;color:var(--green);background:var(--green-soft);border:none;border-radius:999px;min-width:44px;min-height:38px;cursor:pointer;}
+.textsize button:active{background:var(--green);color:#fff;}
+.textsize span{font-size:12px;color:var(--ink-soft);white-space:nowrap;}
+@media(max-width:480px){ header .head-in{padding-top:64px;} .textsize{left:12px;right:auto;} }
+
+/* ---- Bottom navigation (mobile) ---- */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;gap:6px;margin:0;
+  background:#fff;border:none;border-top:2px solid var(--line);border-radius:0;
+  padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 24px rgba(28,81,56,.14);}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:8px 4px;border-radius:14px;font-size:13px;line-height:1.2;min-height:60px;}
+.tab .ti{font-size:25px;line-height:1;}
+.tab .tl{font-weight:700;letter-spacing:.1px;}
+.tab.active{background:var(--green);color:#fff;box-shadow:0 4px 12px rgba(28,81,56,.28);}
+
+/* ---- Bigger touch targets everywhere ---- */
+.btn{min-height:56px;font-size:17.5px;border-radius:14px;}
+.vbtns .agree,.vbtns .disagree{min-height:54px;font-size:16.5px;border-radius:13px;}
+.vin button,.candauth button,.candbar button,.uploadbtn,.qvbtn{min-height:50px;font-size:15.5px;}
+input,textarea,select{font-size:17px;padding:14px 15px;border-radius:12px;}
+textarea{min-height:120px;}
+.chip{min-height:44px;font-size:14.5px;padding:9px 16px;}
+.panel-toggle .pt-title{font-size:18.5px;}
+.panel-toggle{min-height:60px;}
+
+/* ---- Cards & stats readability ---- */
+.panel{border-radius:18px;}
+.stats{gap:10px;}
+.stat{padding:14px 10px;border-radius:16px;min-height:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.stat .n{font-size:30px;}
+.stat .l{font-size:13px;line-height:1.3;text-align:center;}
+.status{font-size:12.5px;padding:4px 11px;}
+.item .q{font-size:16.5px;line-height:1.6;}
+.timeline .tl-i{font-size:13.5px;}
+.vc.yes,.vc.no{font-size:14px;padding:8px 14px;}
+.vc.yes .big,.vc.no .big{font-size:18px;}
+footer{padding-bottom:120px;font-size:13.5px;}
+
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px;}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;}}
+
+/* ---- Desktop (>=820px): top pill tabs, roomier layout ---- */
+@media(min-width:820px){
+  .wrap{padding:18px 24px 60px;}
+  header .head-in{padding:26px 24px;}
+  .textsize{top:16px;right:24px;}
+  .tabs{position:static;box-shadow:0 6px 18px rgba(28,81,56,.06);border:1px solid var(--line);border-radius:16px;
+    padding:6px;margin:22px 0 8px;}
+  .tab{flex-direction:row;gap:9px;min-height:54px;font-size:15.5px;border-radius:11px;}
+  .tab .ti{font-size:21px;}
+  footer{padding-bottom:26px;}
+  .stats{gap:12px;}
+  .stat .n{font-size:32px;}
+}
 </style>
 </head>
 <body>
 <div class="topbar"></div>
 <header>
   <div class="head-in">
+    <div class="textsize" aria-label="Chỉnh cỡ chữ">
+      <button type="button" onclick="setZoom(-1)" aria-label="Giảm cỡ chữ">A−</button>
+      <span id="zLabel">Cỡ chữ: Vừa</span>
+      <button type="button" onclick="setZoom(1)" aria-label="Tăng cỡ chữ">A+</button>
+    </div>
     <div class="brand">
       <div class="wm"><div class="l1">HÀ ĐÔ CENTROSA</div><div class="l2">Lắng nghe cư dân · Tòa Jasmine</div></div>
     </div>
@@ -266,9 +334,9 @@ footer b{color:var(--ink-soft);}
   <div class="warnbar" id="warnbar">Bản xem thử: trình duyệt này chưa kết nối bộ nhớ lưu trữ nên dữ liệu sẽ không được giữ lại sau khi đóng trang.</div>
 
   <div class="tabs" role="tablist">
-    <button class="tab active" id="tabBtn-req" onclick="showTab('req')">Các vấn đề cư dân đang quan tâm</button>
-    <button class="tab" id="tabBtn-fin" onclick="showTab('fin')">Báo cáo tài chính</button>
-    <button class="tab" id="tabBtn-qa" onclick="showTab('qa')">Quỹ bảo trì</button>
+    <button class="tab active" id="tabBtn-req" onclick="showTab('req')"><span class="ti">📋</span><span class="tl">Vấn đề cư dân</span></button>
+    <button class="tab" id="tabBtn-fin" onclick="showTab('fin')"><span class="ti">📊</span><span class="tl">Tài chính</span></button>
+    <button class="tab" id="tabBtn-qa" onclick="showTab('qa')"><span class="ti">🏦</span><span class="tl">Quỹ bảo trì</span></button>
   </div>
 
   <div class="tabpane active" id="tab-req">
@@ -402,6 +470,8 @@ function hashPhone(p){ let h=2166136261>>>0; const s=SALT+p.replace(/\D/g,"");
 
 let items=[], deviceId="", filterCat="all";
 const $=id=>document.getElementById(id);
+let zoomIdx=0; const ZOOMS=[1,1.15,1.3], ZNAMES=["Vừa","Lớn","Rất lớn"];
+function setZoom(d){ zoomIdx=Math.min(ZOOMS.length-1,Math.max(0,zoomIdx+d)); document.body.style.zoom=ZOOMS[zoomIdx]; const z=document.getElementById("zLabel"); if(z)z.textContent="Cỡ chữ: "+ZNAMES[zoomIdx]; }
 function showTab(which){
   ['req','fin','qa'].forEach(k=>{
     document.getElementById("tab-"+k).classList.toggle("active",k===which);
@@ -480,16 +550,22 @@ function esc(s){return(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":
 function timeAgo(t){const d=Math.floor((Date.now()-t)/1000);if(d<60)return"vừa xong";if(d<3600)return Math.floor(d/60)+" phút trước";if(d<86400)return Math.floor(d/3600)+" giờ trước";return Math.floor(d/86400)+" ngày trước";}
 
 const SEED=[
- {id:"seed-1",apt:"J2‑05.11",anon:false,cat:"Tài chính & quỹ bảo trì",yes:24+Math.floor(Math.random()*36),no:2+Math.floor(Math.random()*8),voters:[],status:"done",statusBy:"BQL Jasmine",statusAt:Date.now()-3600000*6,created:Date.now()-86400000*3,
-  history:[{s:"received",by:"",at:Date.now()-86400000*3},{s:"review",by:"Tổ tiếp nhận",at:Date.now()-86400000*3+3600000*4},{s:"doing",by:"BQL Jasmine",at:Date.now()-86400000*2},{s:"done",by:"BQL Jasmine",at:Date.now()-3600000*6}],
+ {id:"seed-1",apt:"J2‑09.04",anon:false,cat:"Vận hành & dịch vụ",yes:6+Math.floor(Math.random()*10),no:0+Math.floor(Math.random()*3),voters:[],status:"received",statusBy:"",statusAt:Date.now()-3600000*3,created:Date.now()-3600000*3,
+  history:[{s:"received",by:"",at:Date.now()-3600000*3}],
+  msg:"Đề nghị lắp thêm camera an ninh tại khu vực hầm giữ xe và lối thoát hiểm."},
+ {id:"seed-2",apt:"J2‑05.11",anon:false,cat:"Tài chính & quỹ bảo trì",yes:40+Math.floor(Math.random()*20),no:2+Math.floor(Math.random()*6),voters:[],status:"review",statusBy:"Tổ tiếp nhận",statusAt:Date.now()-3600000*20,created:Date.now()-86400000,
+  history:[{s:"received",by:"",at:Date.now()-86400000},{s:"review",by:"Tổ tiếp nhận",at:Date.now()-3600000*20}],
   msg:"Đề nghị công khai báo cáo thu – chi và tình hình quỹ bảo trì theo từng quý để cư dân giám sát."},
- {id:"seed-2",apt:"",anon:true,cat:"Cấp sổ hồng",yes:13+Math.floor(Math.random()*30),no:1+Math.floor(Math.random()*6),voters:[],status:"received",statusBy:"",statusAt:Date.now()-86400000*2,created:Date.now()-86400000*2,
-  history:[{s:"received",by:"",at:Date.now()-86400000*2}],
-  msg:"Yêu cầu có lộ trình rõ ràng và cập nhật định kỳ về tiến độ cấp sổ hồng cho các căn còn lại."},
- {id:"seed-3",apt:"J1‑12.03",anon:false,cat:"An toàn – PCCC",yes:8+Math.floor(Math.random()*24),no:3+Math.floor(Math.random()*7),voters:[],status:"cannot",statusBy:"Tổ kỹ thuật",statusAt:Date.now()-3600000*30,created:Date.now()-86400000,
-  history:[{s:"received",by:"",at:Date.now()-86400000},{s:"review",by:"Tổ kỹ thuật",at:Date.now()-86400000+3600000*5},{s:"cannot",by:"Tổ kỹ thuật",at:Date.now()-3600000*30}],
-  msg:"Kiểm tra và bảo trì định kỳ hệ thống báo cháy, đèn thoát hiểm ở các tầng."}
-]
+ {id:"seed-3",apt:"J1‑12.03",anon:false,cat:"An toàn – PCCC",yes:28+Math.floor(Math.random()*16),no:1+Math.floor(Math.random()*5),voters:[],status:"doing",statusBy:"BQL Jasmine",statusAt:Date.now()-3600000*10,created:Date.now()-86400000*2,
+  history:[{s:"received",by:"",at:Date.now()-86400000*2},{s:"review",by:"Tổ kỹ thuật",at:Date.now()-86400000*2+3600000*5},{s:"doing",by:"BQL Jasmine",at:Date.now()-3600000*10}],
+  msg:"Kiểm tra và bảo trì định kỳ hệ thống báo cháy, đèn thoát hiểm ở các tầng."},
+ {id:"seed-4",apt:"J1‑06.02",anon:false,cat:"Vận hành & dịch vụ",yes:50+Math.floor(Math.random()*20),no:2+Math.floor(Math.random()*5),voters:[],status:"done",statusBy:"BQL Jasmine",statusAt:Date.now()-3600000*8,created:Date.now()-86400000*4,
+  history:[{s:"received",by:"",at:Date.now()-86400000*4},{s:"review",by:"Tổ tiếp nhận",at:Date.now()-86400000*4+3600000*3},{s:"doing",by:"BQL Jasmine",at:Date.now()-86400000*3},{s:"done",by:"BQL Jasmine",at:Date.now()-3600000*8}],
+  msg:"Sửa chữa hệ thống chiếu sáng hành lang các tầng bị hư hỏng."},
+ {id:"seed-5",apt:"",anon:true,cat:"Tài chính & quỹ bảo trì",yes:14+Math.floor(Math.random()*10),no:18+Math.floor(Math.random()*12),voters:[],status:"cannot",statusBy:"Ban Quản trị",statusAt:Date.now()-3600000*26,created:Date.now()-86400000*3,
+  history:[{s:"received",by:"",at:Date.now()-86400000*3},{s:"review",by:"Ban Quản trị",at:Date.now()-86400000*3+3600000*6},{s:"cannot",by:"Ban Quản trị",at:Date.now()-3600000*26}],
+  msg:"Đề nghị dùng quỹ bảo trì để chi cho tiệc tất niên cư dân (không thực hiện được vì sai mục đích sử dụng quỹ theo quy định)."}
+];
 const STATUS={received:{l:"Nhận yêu cầu",c:"s-received"},review:{l:"Đang xem xét",c:"s-review"},doing:{l:"Đang thực hiện",c:"s-doing"},done:{l:"Đã thực hiện",c:"s-done"},cannot:{l:"Không thể thực hiện",c:"s-cannot"}};
 let filterStatus="all", otp={}, pending={}, adminMode=false, adminName="";
 const RPKEY="jasmine-req:pass";
