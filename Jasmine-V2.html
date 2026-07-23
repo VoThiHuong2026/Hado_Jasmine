@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ghi nhận yêu cầu cư dân · Tòa Jasmine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#1c5138; --green2:#2f6f4e; --gold:#b0894b; --gold-soft:#d8bd8b;
+  --paper:#faf8f2; --card:#ffffff; --ink:#2a2c2b; --ink-soft:#5a5d5a;
+  --line:#e7e1d3; --green-soft:#eef4ef; --amber:#c98a1e; --amber-soft:#fff4e0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--paper);color:var(--ink);font-family:'Be Vietnam Pro',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:820px;margin:0 auto;padding:0 18px 80px;}
+.topbar{height:6px;background:linear-gradient(90deg,var(--green) 0%,var(--green2) 55%,var(--gold) 100%);}
+header{background:linear-gradient(160deg,#ffffff 0%,var(--green-soft) 130%);border-bottom:1px solid var(--line);}
+.head-in{max-width:820px;margin:0 auto;padding:26px 18px 24px;}
+.brand{display:flex;align-items:center;gap:14px;}
+.mono{width:52px;height:52px;flex:0 0 52px;border-radius:13px;background:linear-gradient(135deg,var(--green),var(--green2));display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 4px 12px rgba(28,81,56,.26);}
+.mono b{font-family:'Lora',serif;font-weight:700;font-size:23px;color:var(--gold-soft);letter-spacing:1px;}
+.mono .leaf{position:absolute;top:-6px;right:-6px;}
+.brand .wm .l1{font-family:'Lora',serif;font-size:20px;font-weight:700;color:var(--green);letter-spacing:.5px;line-height:1.1;}
+.brand .wm .l2{font-size:11.5px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-top:3px;}
+h1{font-family:'Lora',serif;font-size:29px;font-weight:700;color:var(--green);margin:20px 0 6px;line-height:1.15;}
+.lede{font-size:15.5px;color:var(--ink-soft);max-width:660px;}
+.host{margin-top:14px;display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:30px;padding:6px 8px 6px 6px;font-size:13px;color:var(--ink-soft);}
+.host .dot{width:26px;height:26px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-weight:700;font-size:13px;}
+.host b{color:var(--ink);}
+.purpose{background:var(--amber-soft);border:1px solid #f0dcae;border-radius:12px;padding:13px 15px;font-size:13.5px;color:#7a5a12;margin-top:16px;line-height:1.55;}
+.purpose b{color:#5e4407;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0 8px;}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center;}
+.stat .n{font-family:'Lora',serif;font-size:29px;font-weight:700;color:var(--green);line-height:1;}
+.stat .l{font-size:11.5px;color:var(--ink-soft);margin-top:6px;letter-spacing:.2px;}
+.stat.ver .n{color:var(--green);} .stat.unver .n{color:var(--amber);}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:22px;box-shadow:0 8px 24px rgba(28,81,56,.05);}
+.panel h2{font-family:'Lora',serif;font-size:20px;color:var(--green);margin-bottom:4px;}
+.panel .sub{font-size:13.5px;color:var(--ink-soft);margin-bottom:18px;}
+.collapsible{padding:0;overflow:hidden;}
+.panel-toggle{width:100%;display:flex;align-items:center;gap:14px;background:none;border:none;cursor:pointer;font-family:inherit;text-align:left;padding:20px 22px;}
+.panel-toggle .pt-text{flex:1;min-width:0;}
+.panel-toggle .pt-title{font-family:'Lora',serif;font-size:20px;font-weight:700;color:var(--green);display:block;}
+.panel-toggle .pt-sub{font-size:13px;color:var(--ink-soft);display:block;margin-top:3px;font-weight:400;line-height:1.4;}
+.panel-toggle .chev{flex:0 0 auto;color:var(--green);transition:transform .25s;}
+.panel-toggle:hover .pt-title{color:var(--green2);}
+.collapsible.open .panel-toggle .chev{transform:rotate(180deg);}
+.panel-body{padding:2px 22px 22px;display:none;}
+.collapsible.open .panel-body{display:block;animation:slideDown .22s ease;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
+label{display:block;font-size:13px;font-weight:600;color:var(--ink);margin:14px 0 6px;}
+label span{font-weight:400;color:var(--ink-soft);}
+input,select,textarea{width:100%;font-family:inherit;font-size:15px;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:11px 13px;transition:border-color .15s,box-shadow .15s;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green2);box-shadow:0 0 0 3px rgba(47,111,78,.12);}
+textarea{min-height:105px;resize:vertical;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.check{display:flex;align-items:center;gap:9px;margin-top:14px;font-size:14px;color:var(--ink-soft);cursor:pointer;}
+.check input{width:auto;}
+.privacy{font-size:12.5px;color:var(--ink-soft);background:var(--green-soft);border:1px solid #d8e5db;border-radius:10px;padding:10px 12px;margin-top:14px;line-height:1.5;}
+.btn{margin-top:16px;width:100%;background:var(--green);color:#fff;font-family:inherit;font-weight:600;font-size:15.5px;border:none;border-radius:12px;padding:14px;cursor:pointer;transition:background .15s,transform .05s;letter-spacing:.3px;}
+.btn:hover{background:var(--green2);} .btn:active{transform:translateY(1px);}
+.btn:disabled{opacity:.55;cursor:not-allowed;}
+.msg{font-size:14px;margin-top:12px;padding:11px 13px;border-radius:10px;display:none;}
+.msg.ok{display:block;background:var(--green-soft);color:var(--green);border:1px solid #cfe2d5;}
+.msg.err{display:block;background:#fbeaea;color:#9a3131;border:1px solid #f0cfcf;}
+.sortnote{font-size:12.5px;color:var(--ink-soft);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.sortnote .b{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;}
+.chip{font-size:12.5px;padding:7px 13px;border-radius:30px;border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);cursor:pointer;transition:all .12s;font-family:inherit;}
+.chip.on{background:var(--green);border-color:var(--green);color:#fff;}
+.list{display:flex;flex-direction:column;gap:14px;}
+.item{border:1px solid var(--line);border-radius:15px;padding:16px 18px;background:#fff;display:flex;gap:15px;}
+.rank{flex:0 0 40px;text-align:center;}
+.rank .rn{font-family:'Lora',serif;font-size:24px;font-weight:700;color:var(--green);line-height:1;}
+.rank .rl{font-size:9.5px;color:var(--ink-soft);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+.body{flex:1;min-width:0;}
+.meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:9px;}
+.who{font-weight:600;font-size:13.5px;color:var(--ink);} .who .apt{color:var(--ink-soft);font-weight:400;}
+.time{font-size:12px;color:#9a978d;margin-left:auto;}
+.tag{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--green-soft);color:var(--green);}
+.q{font-size:15px;color:var(--ink);white-space:pre-wrap;}
+.votes{margin-top:13px;padding-top:13px;border-top:1px solid #f0ece0;}
+.vcounts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:11px;}
+.vc{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:20px;}
+.vc.ver{background:var(--green-soft);color:var(--green);}
+.vc.unver{background:var(--amber-soft);color:var(--amber);}
+.vc .big{font-family:'Lora',serif;font-size:15px;}
+.vbtns{display:flex;gap:9px;flex-wrap:wrap;}
+.vbtns button{font-family:inherit;font-weight:600;font-size:13px;border-radius:10px;padding:9px 15px;cursor:pointer;border:1.5px solid var(--green);}
+.vbtns .primary{background:var(--green);color:#fff;}
+.vbtns .primary:hover{background:var(--green2);}
+.vbtns .ghost{background:#fff;color:var(--green);border-color:var(--line);}
+.vbtns button:disabled{opacity:.5;cursor:not-allowed;}
+.verify{display:none;margin-top:11px;background:#fbf8f1;border:1px solid var(--line);border-radius:11px;padding:12px;}
+.verify.open{display:block;}
+.verify .vin{display:flex;gap:8px;}
+.verify .vin input{flex:1;}
+.verify .vin button{flex:0 0 auto;background:var(--green);color:#fff;border:none;border-radius:10px;padding:0 16px;font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;}
+.verify .vlab{font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;line-height:1.45;}
+.verify .note{font-size:11.5px;color:var(--ink-soft);margin-top:8px;line-height:1.45;}
+.vmsg{font-size:12.5px;margin-top:8px;}
+.vmsg.ok{color:var(--green);} .vmsg.err{color:#9a3131;}
+.empty{text-align:center;padding:34px 20px;color:var(--ink-soft);}
+.empty .ic{font-size:34px;} .empty p{font-size:14.5px;margin-top:8px;}
+.demo-badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.5px;color:var(--gold);background:#fff;border:1px solid var(--gold-soft);border-radius:6px;padding:2px 7px;vertical-align:middle;margin-left:8px;}
+.warnbar{display:none;background:var(--amber-soft);color:var(--amber);border:1px solid #f0dcae;border-radius:10px;padding:10px 13px;font-size:12.5px;margin-top:16px;text-align:center;}
+footer{text-align:center;font-size:12px;color:#9a978d;margin-top:34px;line-height:1.7;}
+footer b{color:var(--ink-soft);}
+@media(max-width:560px){.stats{grid-template-columns:1fr;}.row2{grid-template-columns:1fr;}h1{font-size:24px;}.item{gap:11px;}.rank{flex:0 0 32px;}}
+
+/* Q&A section */
+.candbar{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px dashed var(--gold-soft);border-radius:12px;padding:11px 15px;margin-bottom:14px;}
+.candbar .t{font-size:12.5px;color:var(--ink-soft);}
+.candbar button{font-family:inherit;font-weight:600;font-size:12.5px;color:var(--green);background:var(--green-soft);border:1px solid #cfe2d5;border-radius:9px;padding:8px 14px;cursor:pointer;}
+.candbar.on button{background:var(--green);color:#fff;border-color:var(--green);}
+.candauth{display:none;gap:8px;margin-bottom:14px;align-items:flex-start;flex-wrap:wrap;}
+.candauth.show{display:flex;}
+.candauth input{flex:1;min-width:180px;}
+.candauth button{flex:0 0 auto;background:var(--green);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;}
+.candauth .vmsg{flex-basis:100%;}
+.answer{margin-top:13px;background:var(--green-soft);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:12px 14px;}
+.answer .ah{font-size:12.5px;font-weight:700;color:var(--green);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.answer .ah .vh{width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.answer .at{font-size:14.5px;color:var(--ink);white-space:pre-wrap;line-height:1.6;}
+.replybox{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);}
+.replybox textarea{min-height:72px;font-size:14px;}
+.noans{margin-top:10px;font-size:12.5px;color:#9a978d;font-style:italic;}
+
+.qtag{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.3px;}
+.qtag.wait{background:var(--amber-soft);color:var(--amber);}
+.qtag.done{background:var(--green-soft);color:var(--green);}
+.qvote{display:flex;align-items:center;gap:12px;margin-top:11px;}
+.qvc{font-size:13px;color:var(--ink-soft);}
+.qvc b{color:var(--green);font-family:'Lora',serif;font-size:15px;}
+.qvbtn{font-family:inherit;font-weight:600;font-size:12.5px;color:var(--green);background:#fff;border:1.5px solid var(--line);border-radius:9px;padding:7px 14px;cursor:pointer;}
+.qvbtn:hover:not(:disabled){border-color:var(--green);}
+.qvbtn:disabled{opacity:.5;cursor:not-allowed;}
+.candzone{margin-top:30px;}
+.candzone .candbar{margin-bottom:0;}
+.candzone .candauth{margin-top:12px;margin-bottom:0;}
+.submit-inline{margin-top:24px;border:1px solid var(--line);border-radius:14px;background:#fbfaf6;}
+.submit-inline .panel-toggle{padding:16px 18px;}
+.submit-inline .pt-title{font-size:18px;}
+.submit-inline .panel-body{padding:2px 18px 18px;}
+
+.tabs{display:flex;gap:8px;margin:22px 0 6px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:6px;box-shadow:0 6px 18px rgba(28,81,56,.05);}
+.tab{flex:1;font-family:'Be Vietnam Pro',sans-serif;font-weight:600;font-size:15px;color:var(--ink-soft);background:none;border:none;border-radius:10px;padding:13px 10px;cursor:pointer;transition:background .15s,color .15s;line-height:1.25;}
+.tab.active{background:var(--green);color:#fff;box-shadow:0 3px 10px rgba(28,81,56,.2);}
+.tab:hover:not(.active){background:var(--green-soft);color:var(--green);}
+.tabpane{display:none;}
+.tabpane.active{display:block;}
+@media(max-width:560px){.tab{font-size:13px;padding:12px 6px;}}
+
+.filters.status{margin-top:2px;margin-bottom:16px;}
+.chip.st.on{background:#b0894b;border-color:#b0894b;color:#fff;}
+.status{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.2px;white-space:nowrap;}
+.status.s-review{background:#f3ead6;color:#8a6d2f;}
+.status.s-doing{background:#e7f3ea;color:#2f7d4f;}
+.status.s-cannot{background:#f8ebe6;color:#b4472e;}
+.statusby{font-size:12.5px;color:#5c5f5c;margin-top:8px;}
+.vc.yes,.vc.no{display:inline-flex;align-items:center;gap:6px;font-size:13px;padding:6px 12px;border-radius:20px;}
+.vc.yes{background:#e7f3ea;color:#2f7d4f;} .vc.no{background:#f8ebe6;color:#b4472e;}
+.vc.yes .big,.vc.no .big{font-family:'Lora',serif;font-weight:700;font-size:16px;}
+.vbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+.vbtns .agree{flex:1;min-width:130px;background:#1c5138;color:#fff;border:none;border-radius:10px;padding:11px 14px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;}
+.vbtns .agree:hover{background:#2f6f4e;}
+.vbtns .disagree{flex:1;min-width:130px;background:#fff;color:#b4472e;border:1.5px solid #e0b4a5;border-radius:10px;padding:11px 14px;font-family:inherit;font-weight:600;font-size:14px;cursor:pointer;}
+.vbtns .disagree:hover{border-color:#b4472e;}
+.statusctl{margin-top:12px;padding-top:12px;border-top:1px dashed #e4dece;font-size:13px;color:#5c5f5c;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.statusctl select{font-family:inherit;font-size:13.5px;padding:8px 10px;border:1.5px solid #e4dece;border-radius:9px;background:#fff;color:#242625;}
+.otpdemo{font-size:13px;color:#5c5f5c;margin-bottom:8px;}
+.otpdemo .demo{color:#b0894b;}
+
+.status.s-received{background:#e6eef5;color:#2f5f8a;}
+.status.s-done{background:#1c5138;color:#fff;}
+.metatime{font-size:12.5px;color:#5c5f5c;margin-top:3px;}
+.timeline{margin-top:12px;padding:12px 14px;background:#f6f4ee;border:1px solid #e4dece;border-radius:12px;}
+.timeline .tl-h{font-size:12.5px;font-weight:700;color:#1c5138;margin-bottom:8px;}
+.timeline .tl-i{display:flex;align-items:center;gap:8px;font-size:13px;color:#242625;padding:4px 0;flex-wrap:wrap;}
+.timeline .tl-dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;background:#b0894b;}
+.timeline .tl-dot.s-received{background:#2f5f8a;}.timeline .tl-dot.s-review{background:#8a6d2f;}.timeline .tl-dot.s-doing{background:#2f7d4f;}.timeline .tl-dot.s-done{background:#1c5138;}.timeline .tl-dot.s-cannot{background:#b4472e;}
+.timeline .tl-lab{font-weight:600;min-width:120px;}
+.timeline .tl-time{color:#5c5f5c;font-variant-numeric:tabular-nums;}
+.timeline .tl-by{color:#8a6d2f;font-size:12px;}
+.ah-time{font-weight:400;color:#5c5f5c;font-size:12px;}
+
+.stats{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));}
+.stat{cursor:pointer;transition:border-color .12s,box-shadow .12s;}
+.stat:hover{border-color:#b0894b;box-shadow:0 4px 14px rgba(28,81,56,.08);}
+.stat.st-received .n{color:#2f5f8a;}
+.stat.st-review .n{color:#8a6d2f;}
+.stat.st-doing .n{color:#2f7d4f;}
+.stat.st-done .n{color:#1c5138;}
+.stat.st-cannot .n{color:#b4472e;}
+.stat.active{border-color:#1c5138;box-shadow:0 0 0 2px rgba(28,81,56,.28);}
+
+.uploader{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px;}
+.uploadbtn{display:inline-flex;align-items:center;gap:8px;background:#eef4ef;border:1.5px solid #cfe2d5;color:#1c5138;font-weight:600;font-size:14px;padding:11px 16px;border-radius:10px;cursor:pointer;}
+.uploadbtn:hover{border-color:#2f6f4e;}
+.uploadhint{font-size:12.5px;color:#5c5f5c;}
+.preview{display:flex;flex-wrap:wrap;gap:10px;}
+.preview:empty{margin:0;}
+.att{position:relative;width:74px;height:74px;border-radius:10px;overflow:hidden;border:1px solid #e4dece;background:#fff;}
+.att img{width:100%;height:100%;object-fit:cover;display:block;}
+.att.file{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:auto;min-width:92px;max-width:150px;height:74px;padding:6px 10px;}
+.att.file .fi{font-size:22px;}
+.att.file .fn{font-size:10.5px;color:#5c5f5c;text-align:center;word-break:break-all;line-height:1.2;max-height:2.4em;overflow:hidden;}
+.attx{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,.55);color:#fff;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.atts{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 2px;}
+.att-img{display:block;width:96px;height:96px;border-radius:10px;overflow:hidden;border:1px solid #e4dece;}
+.att-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.att-fl{display:inline-flex;align-items:center;gap:7px;background:#f6f4ee;border:1px solid #e4dece;border-radius:9px;padding:9px 13px;font-size:13.5px;color:#1c5138;text-decoration:none;font-weight:600;}
+.att-fl:hover{border-color:#b0894b;}
+
+.finctrl{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:14px;color:#5c5f5c;}
+.finctrl select{font-family:inherit;font-size:14.5px;padding:9px 12px;border:1.5px solid #e4dece;border-radius:10px;background:#fff;color:#242625;}
+.fin-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px;margin-bottom:18px;}
+.fin-c{border:1px solid #e4dece;border-radius:14px;padding:16px 18px;background:#fff;border-top:4px solid #b0894b;}
+.fin-c .fc-l{font-size:13px;color:#5c5f5c;}
+.fin-c .fc-n{font-family:'Lora',serif;font-weight:700;font-size:21px;color:#242625;margin-top:6px;font-variant-numeric:tabular-nums;line-height:1.15;}
+.fin-c.fund{border-top-color:#1c5138;}.fin-c.fund .fc-n{color:#1c5138;}
+.fin-c.inc{border-top-color:#2f7d4f;}.fin-c.inc .fc-n{color:#2f7d4f;}
+.fin-c.exp{border-top-color:#b4472e;}.fin-c.exp .fc-n{color:#b4472e;}
+.fin-c.bal{border-top-color:#2f5f8a;}.fin-c.bal .fc-n{color:#2f5f8a;}
+.fin-2col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;}
+@media(max-width:640px){.fin-2col{grid-template-columns:1fr;}}
+.fin-block{border:1px solid #e4dece;border-radius:14px;padding:18px 20px;background:#fff;}
+.fin-block h3{font-family:'Lora',serif;color:#1c5138;font-size:17px;margin-bottom:14px;}
+.fin-row{margin-bottom:12px;}
+.fin-row .fr-top{display:flex;justify-content:space-between;gap:12px;font-size:14px;margin-bottom:5px;}
+.fin-row .fr-l{color:#242625;}
+.fin-row .fr-v{color:#242625;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.fin-row .fr-v em{color:#8a8778;font-style:normal;font-weight:400;font-size:12.5px;}
+.fin-row .fr-bar{height:8px;background:#f0eee6;border-radius:999px;overflow:hidden;}
+.fin-row .fr-bar i{display:block;height:100%;border-radius:999px;}
+.fin-row .fr-bar i.in{background:#2f7d4f;}.fin-row .fr-bar i.ex{background:#b4472e;}
+.fin-total{margin-top:14px;padding-top:12px;border-top:1px dashed #e4dece;font-size:14.5px;color:#242625;text-align:right;}
+.fund-box{border:1px solid #cfe2d5;background:#f2f8f4;border-radius:14px;padding:18px 20px;margin-bottom:18px;}
+.fund-box h3{font-family:'Lora',serif;color:#1c5138;font-size:17px;margin-bottom:12px;}
+.fund-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #dfeae2;font-size:14.5px;font-variant-numeric:tabular-nums;}
+.fund-row b{font-weight:700;}.fund-row .pos{color:#2f7d4f;}.fund-row .neg{color:#b4472e;}
+.fund-row.total{border-bottom:none;border-top:2px solid #1c5138;margin-top:4px;padding-top:12px;font-size:16px;}
+.fund-row.total b{color:#1c5138;font-family:'Lora',serif;}
+.fund-note{font-size:12.5px;color:#5c5f5c;margin-top:10px;}
+.fin-docs{border:1px dashed #e4dece;border-radius:12px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.fin-docs .fd-h{font-weight:700;color:#1c5138;font-size:13.5px;width:100%;margin-bottom:2px;}
+.fin-docs .fd{display:inline-flex;align-items:center;gap:6px;background:#f6f4ee;border:1px solid #e4dece;border-radius:9px;padding:9px 13px;font-size:13px;color:#1c5138;}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<header>
+  <div class="head-in">
+    <div class="brand">
+      <div class="wm"><div class="l1">HÀ ĐÔ CENTROSA</div><div class="l2">Lắng nghe cư dân · Tòa Jasmine</div></div>
+    </div>
+    <h1>Lắng nghe &amp; đồng hành cùng cư dân Jasmine</h1>
+    <p class="lede">Mọi thay đổi tích cực đều bắt đầu từ việc lắng nghe. Đây là nơi để cư dân cùng nêu lên những vấn đề, mong muốn và đề xuất của mình, đồng thời đối thoại trực tiếp với Ban Quản trị. Khi tiếng nói của cư dân được tôn trọng và phản hồi minh bạch, chúng ta sẽ cùng xây dựng một Jasmine văn minh, đoàn kết và đáng sống hơn.</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="warnbar" id="warnbar">Bản xem thử: trình duyệt này chưa kết nối bộ nhớ lưu trữ nên dữ liệu sẽ không được giữ lại sau khi đóng trang.</div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" id="tabBtn-req" onclick="showTab('req')">Các vấn đề cư dân đang quan tâm</button>
+    <button class="tab" id="tabBtn-fin" onclick="showTab('fin')">Báo cáo tài chính</button>
+    <button class="tab" id="tabBtn-qa" onclick="showTab('qa')">Quỹ bảo trì</button>
+  </div>
+
+  <div class="tabpane active" id="tab-req">
+  <div class="stats">
+    <div class="stat" data-st="all" onclick="filterStatus='all';render()"><div class="n" id="stTotal">0</div><div class="l">Tổng số yêu cầu</div></div>
+    <div class="stat st-received" data-st="received" onclick="filterStatus='received';render()"><div class="n" id="stReceived">0</div><div class="l">Nhận yêu cầu</div></div>
+    <div class="stat st-review" data-st="review" onclick="filterStatus='review';render()"><div class="n" id="stReview">0</div><div class="l">Đang xem xét</div></div>
+    <div class="stat st-doing" data-st="doing" onclick="filterStatus='doing';render()"><div class="n" id="stDoing">0</div><div class="l">Đang thực hiện</div></div>
+    <div class="stat st-done" data-st="done" onclick="filterStatus='done';render()"><div class="n" id="stDone">0</div><div class="l">Đã thực hiện</div></div>
+    <div class="stat st-cannot" data-st="cannot" onclick="filterStatus='cannot';render()"><div class="n" id="stCannot">0</div><div class="l">Không thể thực hiện</div></div>
+  </div>
+
+  <div class="panel">
+    <h2>Các vấn đề cư dân đang quan tâm</h2>
+    <div class="sortnote"><span class="b"></span> Xếp theo <b>&nbsp;lượt Đồng ý&nbsp;</b> (cao → thấp). Mỗi lượt bình chọn cần xác thực bằng mã OTP.</div>
+    <div class="filters" id="filters"></div>
+    <div class="list" id="list"></div>
+  <div class="collapsible submit-inline" id="submitPanel">
+    <button type="button" class="panel-toggle" id="submitToggle" aria-expanded="false" aria-controls="submitBody">
+      <span class="pt-text">
+        <span class="pt-title">Gửi vấn đề cư dân quan tâm nhất</span>
+        <span class="pt-sub">Bấm để mở biểu mẫu — yêu cầu sẽ hiển thị công khai để cư dân cùng bình chọn.</span>
+      </span>
+      <svg class="chev" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </button>
+    <div class="panel-body" id="submitBody">
+    <label>Căn hộ <span>(để mọi người biết vấn đề thuộc căn nào — không bắt buộc)</span></label>
+      <input id="fApt" placeholder="VD: J1-08.05" maxlength="20">
+    <label>Nhóm vấn đề</label>
+    <select id="fCat">
+      <option>Tài chính &amp; quỹ bảo trì</option>
+      <option>Cấp sổ hồng</option>
+      <option>Diện tích chung – riêng</option>
+      <option>An toàn – PCCC</option>
+      <option>Vận hành &amp; dịch vụ</option>
+      <option>Vệ sinh – môi trường</option>
+      <option>Khác</option>
+    </select>
+    <label>Nội dung yêu cầu</label>
+    <textarea id="fMsg" placeholder="Mô tả rõ vấn đề và mong muốn của bạn…" maxlength="1200"></textarea>
+    <label>Hình ảnh / tệp đính kèm <span>(không bắt buộc)</span></label>
+    <div class="uploader">
+      <label class="uploadbtn" for="fFiles">📎 Chọn hình ảnh hoặc tệp</label>
+      <input type="file" id="fFiles" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" multiple hidden>
+      <span class="uploadhint">Ảnh, PDF, Word, Excel — tối đa 3MB mỗi tệp</span>
+    </div>
+    <div class="preview" id="fPreview"></div>
+    <label class="check"><input type="checkbox" id="fAnon"> Gửi ẩn danh (ẩn mã căn hộ)</label>
+    <div class="privacy">🔒 Vì nội dung hiển thị công khai, vui lòng <b>không ghi thông tin nhạy cảm</b> (số tài khoản, giấy tờ tùy thân…).</div>
+    <button class="btn" id="submitBtn">Gửi yêu cầu</button>
+    <div class="msg" id="formMsg"></div>
+    </div>
+  </div>
+  </div>
+
+  <div class="candzone" style="margin-top:20px">
+    <div class="candbar" id="adminbarWrap">
+      <span class="t">Bạn là người xử lý (BQT/tổ xử lý)? Đăng nhập để cập nhật trạng thái.</span>
+      <button id="adminBtn">Chế độ xử lý</button>
+    </div>
+    <div class="candauth" id="adminAuth">
+      <input id="adminName" placeholder="Tên người xử lý" maxlength="40">
+      <input id="adminPass" type="password" placeholder="Mật khẩu (lần đầu sẽ tự đặt)" maxlength="40">
+      <button id="adminEnter">Vào</button>
+      <div class="vmsg" id="adminMsg"></div>
+    </div>
+  </div>
+  </div><!-- /tab-req -->
+
+  <div class="tabpane" id="tab-fin">
+    <div class="panel">
+      <h2>Báo cáo tài chính &amp; quỹ bảo trì</h2>
+      <p class="sub">Công khai thu – chi vận hành và tình hình quỹ bảo trì để cư dân giám sát.</p>
+      <div class="finctrl">
+        <label>Kỳ báo cáo:</label>
+        <select id="finPeriod" onchange="renderFinance()">
+          <option value="q3-2026">Quý III / 2026</option>
+          <option value="q2-2026">Quý II / 2026</option>
+        </select>
+      </div>
+      <div id="finBody"></div>
+    </div>
+  </div><!-- /tab-fin -->
+
+  <div class="tabpane" id="tab-qa">
+    <div class="panel">
+      <h2>Quỹ bảo trì 2%</h2>
+      <p class="sub">Tình hình thu – chi và số dư quỹ bảo trì phần sở hữu chung, quản lý trong tài khoản riêng theo quy định.</p>
+      <div class="finctrl">
+        <label>Kỳ báo cáo:</label>
+        <select id="mfPeriod" onchange="renderFund()">
+          <option value="q3-2026">Quý III / 2026</option>
+          <option value="q2-2026">Quý II / 2026</option>
+        </select>
+      </div>
+      <div id="fundBody"></div>
+    </div>
+  </div><!-- /tab-qa -->
+
+  <footer>
+    Đây là <b>ý tưởng đề xuất triển khai</b>, hướng tới công khai – minh bạch mọi vấn đề của cộng đồng cư dân Tòa Jasmine.<br>
+    Hiện chưa phải kênh chính thức của Ban Quản trị hay Chủ đầu tư.
+  </footer>
+</div>
+
+<script>
+const KEY="jasmine-portal:requests";
+const DEVKEY="jasmine-portal:device";
+const SALT="jasmine-2026";
+const hasStore = typeof window!=="undefined" && window.storage && typeof window.storage.get==="function";
+let mem=null, memDev=null, memQA=null, memPass=null, memReqPass=null;
+if(!hasStore){ document.getElementById("warnbar").style.display="block"; }
+
+async function loadAll(){
+  if(!hasStore) return mem||[];
+  try{ const r=await window.storage.get(KEY,true); return r&&r.value?JSON.parse(r.value):[]; }catch(e){ return []; }
+}
+async function saveAll(a){
+  if(!hasStore){ mem=a; return; }
+  try{ await window.storage.set(KEY,JSON.stringify(a),true);}catch(e){console.error(e);}
+}
+async function getDevice(){
+  if(!hasStore){ if(!memDev)memDev="d-"+Math.random().toString(36).slice(2); return memDev; }
+  try{ const r=await window.storage.get(DEVKEY,false); if(r&&r.value)return r.value;
+    const id="d-"+Date.now()+Math.random().toString(36).slice(2); await window.storage.set(DEVKEY,id,false); return id;
+  }catch(e){ return "d-fallback"; }
+}
+// weak hash — demo only (real system must verify by server-side OTP and never expose)
+function hashPhone(p){ let h=2166136261>>>0; const s=SALT+p.replace(/\D/g,"");
+  for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return "h"+(h>>>0).toString(36); }
+
+let items=[], deviceId="", filterCat="all";
+const $=id=>document.getElementById(id);
+function showTab(which){
+  ['req','fin','qa'].forEach(k=>{
+    document.getElementById("tab-"+k).classList.toggle("active",k===which);
+    document.getElementById("tabBtn-"+k).classList.toggle("active",k===which);
+  });
+  if(which==='fin' && typeof renderFinance==='function') renderFinance();
+  if(which==='qa' && typeof renderFund==='function') renderFund();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+const FINANCE={
+ "q3-2026":{label:"Quý III/2026",fundOpen:12450000000,fundInt:62000000,fundSpend:180000000,opOpen:320000000,fundItems:[["Sơn & chống thấm sảnh, hành lang",95000000],["Thay thiết bị hệ thống bơm nước",52000000],["Sửa chữa hệ thống PCCC phần chung",33000000]],
+   income:[["Phí quản lý vận hành",1240000000],["Phí giữ xe",385000000],["Cho thuê mặt bằng & quảng cáo",156000000],["Lãi ngân hàng & khác",24000000]],
+   expense:[["Bảo vệ – an ninh",372000000],["Vệ sinh",268000000],["Điện – nước khu vực chung",246000000],["Bảo trì thang máy",145000000],["Cây xanh – cảnh quan",92000000],["An toàn PCCC",78000000],["Sửa chữa nhỏ",120000000],["Quản lý – hành chính",210000000]]},
+ "q2-2026":{label:"Quý II/2026",fundOpen:12360000000,fundInt:58000000,fundSpend:95000000,opOpen:295000000,fundItems:[["Bảo trì lớn thang máy (phần chung)",60000000],["Sửa hệ thống chiếu sáng khu vực chung",35000000]],
+   income:[["Phí quản lý vận hành",1225000000],["Phí giữ xe",372000000],["Cho thuê mặt bằng & quảng cáo",150000000],["Lãi ngân hàng & khác",22000000]],
+   expense:[["Bảo vệ – an ninh",368000000],["Vệ sinh",262000000],["Điện – nước khu vực chung",231000000],["Bảo trì thang máy",140000000],["Cây xanh – cảnh quan",90000000],["An toàn PCCC",72000000],["Sửa chữa nhỏ",64000000],["Quản lý – hành chính",205000000]]}
+};
+function vnd(n){return n.toLocaleString('vi-VN')+" đ";}
+function renderFund(){
+  const sel=document.getElementById("mfPeriod"); if(!sel)return; const d=FINANCE[sel.value]; if(!d)return;
+  const fundClose=d.fundOpen+d.fundInt-d.fundSpend;
+  document.getElementById("fundBody").innerHTML=`
+    <div class="fin-cards">
+      <div class="fin-c fund"><div class="fc-l">Số dư đầu kỳ</div><div class="fc-n">${vnd(d.fundOpen)}</div></div>
+      <div class="fin-c inc"><div class="fc-l">Lãi & phát sinh trong kỳ</div><div class="fc-n">+ ${vnd(d.fundInt)}</div></div>
+      <div class="fin-c exp"><div class="fc-l">Chi từ quỹ bảo trì</div><div class="fc-n">− ${vnd(d.fundSpend)}</div></div>
+      <div class="fin-c bal"><div class="fc-l">Số dư cuối kỳ</div><div class="fc-n">${vnd(fundClose)}</div></div>
+    </div>
+    <div class="fund-box">
+      <h3>🏦 Diễn giải quỹ bảo trì 2% (tài khoản riêng)</h3>
+      <div class="fund-row"><span>Số dư đầu kỳ</span><b>${vnd(d.fundOpen)}</b></div>
+      <div class="fund-row"><span>+ Lãi & phát sinh</span><b class="pos">+ ${vnd(d.fundInt)}</b></div>
+      <div class="fund-row"><span>− Chi từ quỹ bảo trì</span><b class="neg">− ${vnd(d.fundSpend)}</b></div>
+      <div class="fund-row total"><span>Số dư cuối kỳ</span><b>${vnd(fundClose)}</b></div>
+      <div class="fund-note">Quỹ bảo trì được quản lý trong tài khoản riêng, chỉ chi cho hạng mục bảo trì phần sở hữu chung theo quy định.</div>
+    </div>
+    <div class="fin-block" style="margin-bottom:18px">
+      <h3>🔧 Các khoản chi từ quỹ bảo trì trong kỳ</h3>
+      ${d.fundItems.map(x=>`<div class="fund-row"><span>${x[0]}</span><b>${vnd(x[1])}</b></div>`).join("")}
+      <div class="fin-total">Tổng chi quỹ bảo trì: <b>${vnd(d.fundSpend)}</b></div>
+    </div>
+    <div class="fin-docs">
+      <div class="fd-h">📎 Tài liệu chi tiết</div>
+      <span class="fd">📄 Sao kê tài khoản quỹ bảo trì ${d.label}</span>
+      <span class="fd">📄 Biên bản &amp; chứng từ các khoản chi</span>
+    </div>
+    <div class="note" style="margin-top:14px">🔒 Số liệu trên là <b>minh hoạ (bản mẫu)</b>. Báo cáo quỹ bảo trì chính thức do Ban Quản trị công bố định kỳ kèm sao kê và chứng từ.</div>`;
+}
+function renderFinance(){
+  const sel=document.getElementById("finPeriod"); if(!sel)return; const d=FINANCE[sel.value]; if(!d)return;
+  const tIn=d.income.reduce((s,x)=>s+x[1],0), tEx=d.expense.reduce((s,x)=>s+x[1],0);
+  const fundClose=d.fundOpen+d.fundInt-d.fundSpend, opClose=d.opOpen+tIn-tEx;
+  const maxIn=Math.max.apply(null,d.income.map(x=>x[1])), maxEx=Math.max.apply(null,d.expense.map(x=>x[1]));
+  const rows=(arr,tot,max,cls)=>arr.map(x=>`<div class="fin-row"><div class="fr-top"><span class="fr-l">${x[0]}</span><span class="fr-v">${vnd(x[1])} <em>· ${Math.round(x[1]/tot*100)}%</em></span></div><div class="fr-bar"><i class="${cls}" style="width:${Math.round(x[1]/max*100)}%"></i></div></div>`).join("");
+  document.getElementById("finBody").innerHTML=`
+    <div class="fin-cards">
+      <div class="fin-c fund"><div class="fc-l">Số dư quỹ bảo trì (cuối kỳ)</div><div class="fc-n">${vnd(fundClose)}</div></div>
+      <div class="fin-c inc"><div class="fc-l">Tổng thu vận hành</div><div class="fc-n">${vnd(tIn)}</div></div>
+      <div class="fin-c exp"><div class="fc-l">Tổng chi vận hành</div><div class="fc-n">${vnd(tEx)}</div></div>
+      <div class="fin-c bal"><div class="fc-l">Tồn quỹ vận hành (cuối kỳ)</div><div class="fc-n">${vnd(opClose)}</div></div>
+    </div>
+    <div class="fin-2col">
+      <div class="fin-block"><h3>💰 Nguồn thu</h3>${rows(d.income,tIn,maxIn,'in')}<div class="fin-total">Tổng thu: <b>${vnd(tIn)}</b></div></div>
+      <div class="fin-block"><h3>🧾 Khoản chi</h3>${rows(d.expense,tEx,maxEx,'ex')}<div class="fin-total">Tổng chi: <b>${vnd(tEx)}</b></div></div>
+    </div>
+
+    <div class="fin-docs">
+      <div class="fd-h">📎 Tài liệu chi tiết</div>
+      <span class="fd">📄 Báo cáo thu – chi ${d.label} (PDF)</span>
+      <span class="fd">📄 Sao kê tài khoản quỹ bảo trì</span>
+      <span class="fd">📄 Chứng từ các khoản chi lớn</span>
+    </div>
+    <div class="note" style="margin-top:14px">🔒 Số liệu trên là <b>minh hoạ (bản mẫu)</b>. Báo cáo tài chính chính thức do Ban Quản trị công bố định kỳ kèm chứng từ; website thật sẽ lấy dữ liệu từ hệ thống kế toán.</div>`;
+}
+function esc(s){return(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function timeAgo(t){const d=Math.floor((Date.now()-t)/1000);if(d<60)return"vừa xong";if(d<3600)return Math.floor(d/60)+" phút trước";if(d<86400)return Math.floor(d/3600)+" giờ trước";return Math.floor(d/86400)+" ngày trước";}
+
+const SEED=[
+ {id:"seed-1",apt:"J2‑05.11",anon:false,cat:"Tài chính & quỹ bảo trì",yes:24+Math.floor(Math.random()*36),no:2+Math.floor(Math.random()*8),voters:[],status:"done",statusBy:"BQL Jasmine",statusAt:Date.now()-3600000*6,created:Date.now()-86400000*3,
+  history:[{s:"received",by:"",at:Date.now()-86400000*3},{s:"review",by:"Tổ tiếp nhận",at:Date.now()-86400000*3+3600000*4},{s:"doing",by:"BQL Jasmine",at:Date.now()-86400000*2},{s:"done",by:"BQL Jasmine",at:Date.now()-3600000*6}],
+  msg:"Đề nghị công khai báo cáo thu – chi và tình hình quỹ bảo trì theo từng quý để cư dân giám sát."},
+ {id:"seed-2",apt:"",anon:true,cat:"Cấp sổ hồng",yes:13+Math.floor(Math.random()*30),no:1+Math.floor(Math.random()*6),voters:[],status:"received",statusBy:"",statusAt:Date.now()-86400000*2,created:Date.now()-86400000*2,
+  history:[{s:"received",by:"",at:Date.now()-86400000*2}],
+  msg:"Yêu cầu có lộ trình rõ ràng và cập nhật định kỳ về tiến độ cấp sổ hồng cho các căn còn lại."},
+ {id:"seed-3",apt:"J1‑12.03",anon:false,cat:"An toàn – PCCC",yes:8+Math.floor(Math.random()*24),no:3+Math.floor(Math.random()*7),voters:[],status:"cannot",statusBy:"Tổ kỹ thuật",statusAt:Date.now()-3600000*30,created:Date.now()-86400000,
+  history:[{s:"received",by:"",at:Date.now()-86400000},{s:"review",by:"Tổ kỹ thuật",at:Date.now()-86400000+3600000*5},{s:"cannot",by:"Tổ kỹ thuật",at:Date.now()-3600000*30}],
+  msg:"Kiểm tra và bảo trì định kỳ hệ thống báo cháy, đèn thoát hiểm ở các tầng."}
+]
+const STATUS={received:{l:"Nhận yêu cầu",c:"s-received"},review:{l:"Đang xem xét",c:"s-review"},doing:{l:"Đang thực hiện",c:"s-doing"},done:{l:"Đã thực hiện",c:"s-done"},cannot:{l:"Không thể thực hiện",c:"s-cannot"}};
+let filterStatus="all", otp={}, pending={}, adminMode=false, adminName="";
+const RPKEY="jasmine-req:pass";
+const REGISTERED=new Set(["p:0909000001","p:0912345678","p:0987654321","e:cudan@jasmine.vn"]); // demo: danh sách SĐT/email chính chủ đã đăng ký
+
+function sortItems(arr){
+  return arr.slice().sort((a,b)=> ((b.yes||0)-(a.yes||0)) || (((b.yes||0)+(b.no||0))-((a.yes||0)+(a.no||0))) || (b.created-a.created));
+}
+function renderFilters(){
+  const cats=["all","Tài chính & quỹ bảo trì","Cấp sổ hồng","Diện tích chung – riêng","An toàn – PCCC","Vận hành & dịch vụ","Vệ sinh – môi trường","Khác"];
+  const box=$("filters"); box.innerHTML="";
+  cats.forEach(c=>{const b=document.createElement("button");b.className="chip"+(filterCat===c?" on":"");b.textContent=c==="all"?"Tất cả nhóm":c;b.onclick=()=>{filterCat=c;render();};box.appendChild(b);});
+}
+function fmtDT(ts){ if(!ts) return ""; const d=new Date(ts); const p=n=>String(n).padStart(2,"0"); return `${p(d.getHours())}:${p(d.getMinutes())} · ${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()}`; }
+function cardHTML(it,idx,rank){
+  const who=it.anon?"Cư dân ẩn danh":("Cư dân"+(it.apt?` <span class="apt">· ${esc(it.apt)}</span>`:""));
+  const st=STATUS[it.status||"received"];
+  const hist=(it.history&&it.history.length)?it.history:[{s:it.status||"received",by:it.statusBy||"",at:it.statusAt||it.created}];
+  const timeline=`<div class="timeline"><div class="tl-h">🕒 Mốc thời gian xử lý</div>`+
+    hist.map(e=>{const es=STATUS[e.s]||STATUS.received; return `<div class="tl-i"><span class="tl-dot ${es.c}"></span><span class="tl-lab">${es.l}</span><span class="tl-time">${fmtDT(e.at)}</span>${e.by?`<span class="tl-by">bởi ${esc(e.by)}</span>`:""}</div>`;}).join("")+`</div>`;
+  const adminCtl=adminMode?`<div class="statusctl">Cập nhật trạng thái:
+    <select onchange="setStatus(${idx},this.value)">
+      <option value="received"${it.status==="received"?" selected":""}>Nhận yêu cầu</option>
+      <option value="review"${it.status==="review"?" selected":""}>Đang xem xét</option>
+      <option value="doing"${it.status==="doing"?" selected":""}>Đang thực hiện</option>
+      <option value="done"${it.status==="done"?" selected":""}>Đã thực hiện</option>
+      <option value="cannot"${it.status==="cannot"?" selected":""}>Không thể thực hiện</option>
+    </select></div>`:"";
+  return `<div class="item">
+    <div class="rank"><div class="rn">${rank}</div><div class="rl">Hạng</div></div>
+    <div class="body">
+      <div class="meta"><span class="who">${who}</span><span class="tag">${esc(it.cat)}</span><span class="status ${st.c}">${st.l}</span></div>
+      <div class="metatime">Tiếp nhận lúc: <b>${fmtDT(it.created)}</b></div>
+      <div class="q">${esc(it.msg)}</div>
+      ${(it.files&&it.files.length)?`<div class="atts">`+it.files.map(fl=>fl.type.startsWith("image/")?`<a class="att-img" href="${fl.data}" target="_blank" rel="noopener"><img src="${fl.data}" alt="hình đính kèm"></a>`:`<a class="att-fl" href="${fl.data}" download="${esc(fl.name)}">📄 ${esc(fl.name)}</a>`).join("")+`</div>`:""}
+      ${timeline}
+      <div class="votes">
+        <div class="vcounts">
+          <span class="vc yes">👍 <span class="big">${it.yes||0}</span> Đồng ý</span>
+          <span class="vc no">👎 <span class="big">${it.no||0}</span> Không đồng ý</span>
+        </div>
+        <div class="vbtns">
+          <button class="agree" onclick="openVote(${idx},'yes')">👍 Đồng ý</button>
+          <button class="disagree" onclick="openVote(${idx},'no')">👎 Không đồng ý</button>
+        </div>
+        <div class="verify" id="vp${idx}">
+          <div class="vlab" id="vlab${idx}"></div>
+          <div id="stepA${idx}"><div class="vin"><input id="ph${idx}" placeholder="Số điện thoại hoặc email" maxlength="60"><button onclick="sendOtp(${idx})">Gửi mã OTP</button></div></div>
+          <div id="stepB${idx}" style="display:none"><div class="otpdemo" id="otpdemo${idx}"></div><div class="vin"><input id="otp${idx}" placeholder="Nhập mã OTP 6 số" maxlength="6" inputmode="numeric"><button onclick="confirmVote(${idx})">Xác nhận</button></div></div>
+          <div class="vmsg" id="vm${idx}"></div>
+          <div class="note">🔒 <b>Chỉ số điện thoại/email đã đăng ký chính chủ mới được bầu chọn.</b> Mỗi lượt cần xác thực bằng mã OTP để tránh trùng lặp. <b>Bản mẫu:</b> mã OTP hiển thị ngay để thử (SĐT chính chủ thử: 0909 000 001); website thật kiểm tra theo danh sách chính chủ và gửi OTP qua SMS/email.</div>
+        </div>
+        ${adminCtl}
+      </div>
+    </div>
+  </div>`;
+}
+function render(){
+  renderFilters();
+  const box=$("list");
+  let view=sortItems(items).filter(it=>(filterCat==="all"||it.cat===filterCat)&&(filterStatus==="all"||(it.status||"received")===filterStatus));
+  if(items.length===0){
+    box.innerHTML=`<div class="empty"><div class="ic">📝</div><p>Chưa có yêu cầu nào được ghi nhận. Hãy là người đầu tiên gửi (mở biểu mẫu ở bên dưới)!</p></div>`;
+  } else if(view.length===0){
+    box.innerHTML=`<div class="empty"><div class="ic">🔍</div><p>Không có vấn đề nào phù hợp bộ lọc.</p></div>`;
+  } else {
+    box.innerHTML=view.map((it,i)=>cardHTML(it,items.indexOf(it),i+1)).join("");
+  }
+  $("stTotal").textContent=items.length;
+  const _c=st=>items.filter(i=>(i.status||"received")===st).length;
+  $("stReceived").textContent=_c("received");
+  $("stReview").textContent=_c("review");
+  $("stDoing").textContent=_c("doing");
+  $("stDone").textContent=_c("done");
+  $("stCannot").textContent=_c("cannot");
+  document.querySelectorAll(".stats .stat").forEach(t=>t.classList.toggle("active",t.dataset.st===filterStatus));
+  updateAdminUI();
+}
+async function submit(){
+  const msg=$("fMsg").value.trim(); const fm=$("formMsg"); fm.className="msg";
+  if(msg.length<5){fm.className="msg err";fm.textContent="Vui lòng nhập nội dung yêu cầu (ít nhất vài từ).";return;}
+  const btn=$("submitBtn");btn.disabled=true;btn.textContent="Đang gửi…";
+  items=await loadAll();
+  { const now=Date.now(); items.push({id:now+"-"+Math.random().toString(36).slice(2,7),name:"",apt:$("fApt").value.trim(),anon:$("fAnon").checked,cat:$("fCat").value,msg,created:now,yes:0,no:0,voters:[],status:"received",statusBy:"",statusAt:now,history:[{s:"received",by:"",at:now}],files:pickedFiles.slice()}); }
+  await saveAll(items);
+  $("fMsg").value="";$("fApt").value="";$("fAnon").checked=false;pickedFiles=[];renderPreview();
+  btn.disabled=false;btn.textContent="Gửi yêu cầu";
+  fm.className="msg ok";fm.textContent="Đã ghi nhận! Vấn đề của bạn đã hiển thị bên dưới để cư dân cùng bình chọn.";
+  setTimeout(()=>{fm.className="msg";},4500); render();
+}
+function openVote(idx,choice){
+  pending[idx]=choice;
+  const el=$("vp"+idx); if(!el)return;
+  document.querySelectorAll('.verify.open').forEach(v=>{if(v!==el)v.classList.remove('open');});
+  el.classList.add("open");
+  $("stepA"+idx).style.display=""; $("stepB"+idx).style.display="none";
+  $("ph"+idx).value=""; const ob=$("otp"+idx); if(ob)ob.value="";
+  $("otpdemo"+idx).textContent=""; $("vm"+idx).className="vmsg"; $("vm"+idx).textContent="";
+  $("vlab"+idx).innerHTML=`Bạn đang chọn: <b>${choice==="yes"?"Đồng ý 👍":"Không đồng ý 👎"}</b>. Nhập số điện thoại hoặc email để nhận mã OTP xác nhận.`;
+}
+function classifyContact(v){
+  const t=(v||"").trim();
+  if(!t) return {kind:"empty"};
+  if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t)) return {kind:"email", key:"e:"+t.toLowerCase()};
+  const d=t.replace(/\D/g,"");
+  if(d.length>=9 && d.length<=11) return {kind:"phone", key:"p:"+d};
+  return {kind:"invalid"};
+}
+function sendOtp(idx){
+  const inp=$("ph"+idx), vm=$("vm"+idx); const c=classifyContact(inp.value);
+  if(c.kind==="empty"||c.kind==="invalid"){ vm.className="vmsg err"; vm.textContent="Vui lòng nhập số điện thoại hoặc email hợp lệ."; return; }
+  if(!REGISTERED.has(c.key)){ vm.className="vmsg err"; vm.textContent="Số điện thoại/email này chưa đăng ký chính chủ nên không thể bầu chọn."; return; }
+  const code=String(Math.floor(100000+Math.random()*900000));
+  otp[idx]={code, key:c.key};
+  $("stepA"+idx).style.display="none"; $("stepB"+idx).style.display="";
+  $("otpdemo"+idx).innerHTML=`Mã OTP đã gửi tới <b>${esc(inp.value.trim())}</b>. <span class="demo">(Bản mẫu — mã của bạn: <b>${code}</b>)</span>`;
+  vm.className="vmsg"; vm.textContent=""; $("otp"+idx).focus();
+}
+async function confirmVote(idx){
+  const vm=$("vm"+idx), st=otp[idx];
+  if(!st){ vm.className="vmsg err"; vm.textContent="Vui lòng bấm Gửi mã OTP trước."; return; }
+  if($("otp"+idx).value.trim()!==st.code){ vm.className="vmsg err"; vm.textContent="Mã OTP không đúng. Vui lòng nhập lại."; return; }
+  items=await loadAll(); const it=items[idx]; if(!it)return;
+  it.voters=it.voters||[]; const h=hashStr(st.key);
+  if(it.voters.some(v=>v.h===h)){ vm.className="vmsg err"; vm.textContent="Liên hệ này đã bình chọn cho vấn đề này rồi."; return; }
+  const choice=pending[idx]||"yes"; it.voters.push({h, v:choice});
+  if(choice==="yes") it.yes=(it.yes||0)+1; else it.no=(it.no||0)+1;
+  await saveAll(items); delete otp[idx]; render();
+}
+function setStatus(idx,val){
+  if(!adminMode)return;
+  (async()=>{ items=await loadAll(); const it=items[idx]; if(!it)return; const now=Date.now(); it.status=val; it.statusBy=adminName||"Người xử lý"; it.statusAt=now; it.history=it.history||[{s:"received",by:"",at:it.created}]; it.history.push({s:val,by:it.statusBy,at:now}); await saveAll(items); render(); })();
+}
+function updateAdminUI(){
+  const w=$("adminbarWrap"); if(!w)return;
+  w.classList.toggle("on",adminMode);
+  $("adminBtn").textContent=adminMode?"Thoát chế độ xử lý":"Chế độ xử lý";
+  w.querySelector(".t").textContent=adminMode?`Đang ở chế độ xử lý — ${adminName}. Có thể đổi trạng thái từng vấn đề.`:"Bạn là người xử lý (BQT/tổ xử lý)? Đăng nhập để cập nhật trạng thái.";
+}
+let pickedFiles=[];
+function renderPreview(){ const box=$("fPreview"); if(!box)return; box.innerHTML=pickedFiles.map((f,i)=> f.type.startsWith("image/") ? `<div class="att"><img src="${f.data}" alt=""><button type="button" class="attx" onclick="removeFile(${i})">×</button></div>` : `<div class="att file"><span class="fi">📄</span><span class="fn">${esc(f.name)}</span><button type="button" class="attx" onclick="removeFile(${i})">×</button></div>`).join(""); }
+function removeFile(i){ pickedFiles.splice(i,1); renderPreview(); }
+function handleFiles(e){ [...e.target.files].forEach(file=>{ if(file.size>3*1024*1024){ alert(`Tệp "${file.name}" vượt quá 3MB, vui lòng chọn tệp nhỏ hơn.`); return; } const r=new FileReader(); r.onload=()=>{ pickedFiles.push({name:file.name,type:file.type||"application/octet-stream",data:r.result}); renderPreview(); }; r.readAsDataURL(file); }); e.target.value=""; }
+$("submitBtn").onclick=submit;
+if($("fFiles")) $("fFiles").addEventListener("change",handleFiles);
+const _sp=$("submitPanel"), _stg=$("submitToggle");
+_stg.onclick=()=>{ const o=_sp.classList.toggle("open"); _stg.setAttribute("aria-expanded",o?"true":"false"); };
+$("adminBtn").onclick=()=>{ if(adminMode){ adminMode=false; render(); return; } $("adminAuth").classList.toggle("show"); };
+$("adminEnter").onclick=async ()=>{
+  const nm=$("adminName").value.trim(), pass=$("adminPass").value.trim(), am=$("adminMsg"); am.className="vmsg";
+  if(!nm){ am.className="vmsg err"; am.textContent="Nhập tên người xử lý."; return; }
+  if(pass.length<4){ am.className="vmsg err"; am.textContent="Mật khẩu tối thiểu 4 ký tự."; return; }
+  let stored=null;
+  if(hasStore){ try{const r=await window.storage.get(RPKEY,true); stored=r&&r.value?r.value:null;}catch(e){} } else stored=memReqPass;
+  const h=hashStr(pass);
+  if(!stored){ if(hasStore){ try{await window.storage.set(RPKEY,h,true);}catch(e){} } else memReqPass=h; }
+  else if(stored!==h){ am.className="vmsg err"; am.textContent="Mật khẩu không đúng."; return; }
+  adminMode=true; adminName=nm; $("adminPass").value=""; $("adminAuth").classList.remove("show"); render();
+};
+
+// ---------------- Q&A với ứng cử viên ----------------
+const QKEY="jasmine-qa:questions", PKEY="jasmine-qa:pass";
+const QSEED=[
+ {id:"q-1",name:"",apt:"J2-08.03",anon:false,q:"Ban Quản Trị sẽ làm gì để cư dân giám sát được quỹ bảo trì?",ans:"Ban Quản Trị cam kết công khai báo cáo thu – chi và tình hình quỹ bảo trì theo quý, quản lý trong tài khoản riêng và ủng hộ kiểm toán độc lập để cư dân giám sát.",ansAt:Date.now()-86400000*2,votes:22+Math.floor(Math.random()*40),voters:[],created:Date.now()-86400000*3},
+ {id:"q-2",name:"",apt:"J1-15.07",anon:false,q:"Ba việc Ban Quản Trị sẽ ưu tiên làm ngay là gì?",ans:"Công khai tài chính & quỹ bảo trì theo quý; lập kênh tiếp nhận và phản hồi ý kiến cư dân có thời hạn rõ ràng; thúc đẩy lộ trình xử lý sổ hồng, diện tích chung – riêng và an toàn PCCC.",ansAt:Date.now()-3600000*10,votes:16+Math.floor(Math.random()*34),voters:[],created:Date.now()-86400000},
+ {id:"q-3",name:"",apt:"J2-11.09",anon:false,q:"Bao lâu Ban Quản Trị tổ chức họp và báo cáo cho cư dân một lần?",ans:"",ansAt:0,votes:11+Math.floor(Math.random()*28),voters:[],created:Date.now()-3600000*6}
+]
+let qas=[], candMode=false;
+function hashStr(x){ let h=2166136261>>>0; const t=SALT+x; for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619);} return "h"+(h>>>0).toString(36); }
+async function loadQA(){ if(!hasStore) return memQA||[]; try{const r=await window.storage.get(QKEY,true);return r&&r.value?JSON.parse(r.value):[];}catch(e){return[];} }
+async function saveQA(a){ if(!hasStore){memQA=a;return;} try{await window.storage.set(QKEY,JSON.stringify(a),true);}catch(e){console.error(e);} }
+function renderQA(){
+  const box=$("qaList"); if(!box) return;
+  if(qas.length===0){ box.innerHTML=`<div class="empty"><div class="ic">💬</div><p>Chưa có câu hỏi nào. Hãy đặt câu hỏi đầu tiên cho Ban Quản Trị!</p></div>`; return; }
+  const view=qas.slice().sort((a,b)=>{
+    const aa=a.ans?1:0, bb=b.ans?1:0;
+    if(aa!==bb) return aa-bb;                                   // chưa trả lời lên đầu
+    if((b.votes||0)!==(a.votes||0)) return (b.votes||0)-(a.votes||0); // nhiều quan tâm hơn lên trước
+    return b.created-a.created;
+  });
+  box.innerHTML=view.map(it=>{
+    const idx=qas.indexOf(it);
+    const who=it.anon?"Cư dân ẩn danh":(esc(it.name||"Cư dân")+(it.apt?` <span class="apt">· ${esc(it.apt)}</span>`:""));
+    const tag = it.ans ? `<span class="qtag done">Đã trả lời</span>` : `<span class="qtag wait">Chờ trả lời</span>`;
+    const voted = it.voters && it.voters.includes(deviceId);
+    const voteRow = `<div class="qvote"><span class="qvc">👍 <b>${it.votes||0}</b> quan tâm</span><button class="qvbtn" ${voted?'disabled':''} onclick="voteQuestion(${idx})">${voted?'Đã quan tâm':'Quan tâm'}</button></div>`;
+    const ansBlock = it.ans ? `<div class="answer"><div class="ah"><span class="vh">BQT</span>Ban Quản Trị trả lời${it.ansAt?` <span class=\"ah-time\">· ${fmtDT(it.ansAt)}</span>`:""}</div><div class="at">${esc(it.ans)}</div></div>` : (candMode?"":`<div class="noans">Chưa có trả lời — Ban Quản Trị sẽ phản hồi tại đây.</div>`);
+    const reply = candMode ? `<div class="replybox"><textarea id="ans${idx}" placeholder="Nhập câu trả lời công khai…">${esc(it.ans||"")}</textarea><button class="btn" style="margin-top:8px;padding:11px" onclick="postAnswer(${idx})">${it.ans?'Cập nhật trả lời':'Đăng trả lời'}</button></div>` : "";
+    return `<div class="item"><div class="body"><div class="meta"><span class="who">${who}</span>${tag}<span class="time">${timeAgo(it.created)}</span></div><div class="q">${esc(it.q)}</div>${voteRow}${ansBlock}${reply}</div></div>`;
+  }).join("");
+}
+async function submitQuestion(){
+  const q=$("qMsg").value.trim(); const fm=$("qFormMsg"); fm.className="msg";
+  if(q.length<5){fm.className="msg err";fm.textContent="Vui lòng nhập câu hỏi của bạn.";return;}
+  const btn=$("qSubmit");btn.disabled=true;btn.textContent="Đang gửi…";
+  qas=await loadQA();
+  qas.push({id:Date.now()+"-"+Math.random().toString(36).slice(2,7),name:"",apt:$("qApt").value.trim(),anon:$("qAnon").checked,q,ans:"",ansAt:0,votes:0,voters:[],created:Date.now()});
+  await saveQA(qas);
+  $("qMsg").value="";$("qApt").value="";$("qAnon").checked=false;
+  btn.disabled=false;btn.textContent="Gửi câu hỏi";
+  fm.className="msg ok";fm.textContent="Đã gửi câu hỏi! Ứng cử viên sẽ trả lời công khai tại đây.";
+  setTimeout(()=>{fm.className="msg";},4500); renderQA();
+}
+async function postAnswer(idx){ qas=await loadQA(); const it=qas[idx]; if(!it)return; it.ans=$("ans"+idx).value.trim(); it.ansAt=Date.now(); await saveQA(qas); renderQA(); }
+async function voteQuestion(idx){ qas=await loadQA(); const it=qas[idx]; if(!it)return; it.voters=it.voters||[]; if(it.voters.includes(deviceId)){ renderQA(); return; } it.voters.push(deviceId); it.votes=(it.votes||0)+1; await saveQA(qas); renderQA(); }
+function updateCandUI(){ $("candbarWrap").classList.toggle("on",candMode); $("candBtn").textContent=candMode?"Thoát chế độ trả lời":"Chế độ trả lời"; $("candbarWrap").querySelector(".t").textContent=candMode?"Bạn đang ở chế độ trả lời — có thể đăng/sửa câu trả lời bên dưới.":"Bạn là thành viên Ban Quản Trị? Đăng nhập để trả lời câu hỏi."; }
+function wireQA(){
+  if(!document.getElementById("askToggle")) return;
+  const at=$("askToggle"), ap=$("askPanel");
+  at.onclick=()=>{ const o=ap.classList.toggle("open"); at.setAttribute("aria-expanded",o?"true":"false"); };
+  $("qSubmit").onclick=submitQuestion;
+  $("candBtn").onclick=()=>{ if(candMode){ candMode=false; updateCandUI(); renderQA(); return; } $("candAuth").classList.toggle("show"); };
+  $("candEnter").onclick=async ()=>{
+    const pass=$("candPass").value.trim(); const cm=$("candMsg"); cm.className="vmsg";
+    if(pass.length<4){cm.className="vmsg err";cm.textContent="Mật khẩu tối thiểu 4 ký tự.";return;}
+    let stored=null;
+    if(hasStore){ try{const r=await window.storage.get(PKEY,true); stored=r&&r.value?r.value:null;}catch(e){} } else stored=memPass;
+    const h=hashStr(pass);
+    if(!stored){ if(hasStore){ try{await window.storage.set(PKEY,h,true);}catch(e){} } else memPass=h; candMode=true; cm.className="vmsg ok"; cm.textContent="Đã đặt mật khẩu trả lời. Bạn đang ở chế độ trả lời."; }
+    else if(stored===h){ candMode=true; cm.className="vmsg ok"; cm.textContent="Đã vào chế độ trả lời."; }
+    else { cm.className="vmsg err"; cm.textContent="Mật khẩu không đúng."; return; }
+    $("candPass").value=""; $("candAuth").classList.remove("show"); updateCandUI(); renderQA();
+  };
+}
+
+(async()=>{
+  deviceId=await getDevice();
+  items=await loadAll(); if(items.length===0){ items=SEED; await saveAll(items); } render();
+  wireQA(); if(document.getElementById("qaList")){ qas=await loadQA(); if(qas.length===0){ qas=QSEED; await saveQA(qas); } renderQA(); }
+})();
+</script>
+</body>
+</html>
