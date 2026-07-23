@@ -479,7 +479,11 @@ function showTab(which){
   });
   if(which==='fin' && typeof renderFinance==='function') renderFinance();
   if(which==='qa' && typeof renderFund==='function') renderFund();
-  window.scrollTo({top:0,behavior:"smooth"});
+  requestAnimationFrame(()=>{
+    const mobile = window.innerWidth < 820;
+    const target = mobile ? document.getElementById("tab-"+which) : document.querySelector(".tabs");
+    if(target){ const y = target.getBoundingClientRect().top + window.scrollY - (mobile?8:6); window.scrollTo({top:Math.max(0,y), behavior:"smooth"}); }
+  });
 }
 const FINANCE={
  "q3-2026":{label:"Quý III/2026",fundOpen:12450000000,fundInt:62000000,fundSpend:180000000,opOpen:320000000,fundItems:[["Sơn & chống thấm sảnh, hành lang",95000000],["Thay thiết bị hệ thống bơm nước",52000000],["Sửa chữa hệ thống PCCC phần chung",33000000]],
