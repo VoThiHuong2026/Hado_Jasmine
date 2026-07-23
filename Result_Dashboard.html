@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kết quả biểu quyết — Hội nghị nhà chung cư Jasmine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f3524;--bg2:#123f2b;--panel:#164d34;--panel2:#1a5a3d;
+  --line:rgba(200,162,80,.28);--gold:#d8bd8b;--gold2:#c8a250;
+  --cream:#f4efe1;--muted:#a9c4b3;--ok:#7fc79b;--no:#e0876b;--abs:#c9c3b0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{background:radial-gradient(120% 120% at 50% 0%,var(--bg2) 0%,var(--bg) 70%);
+  color:var(--cream);font-family:'Be Vietnam Pro',sans-serif;min-height:100vh;padding:2.2vw 2.6vw;}
+.wrap{max-width:1600px;margin:0 auto;}
+header{display:flex;align-items:center;justify-content:space-between;gap:20px;
+  border-bottom:1px solid var(--line);padding-bottom:1.4vw;margin-bottom:1.8vw;}
+.brand .kick{font-size:clamp(11px,1.05vw,17px);letter-spacing:.32em;color:var(--gold2);text-transform:uppercase;font-weight:600;}
+.brand h1{font-family:'Lora',serif;font-weight:700;font-size:clamp(22px,2.7vw,46px);line-height:1.05;margin-top:.35vw;color:#fff;}
+.brand .sub{font-size:clamp(12px,1.05vw,17px);color:var(--muted);margin-top:.5vw;}
+.live{text-align:right;flex:0 0 auto;}
+.live .dot{display:inline-flex;align-items:center;gap:9px;background:rgba(127,199,155,.14);
+  border:1px solid rgba(127,199,155,.4);color:var(--ok);padding:.5vw .9vw;border-radius:999px;
+  font-weight:600;font-size:clamp(11px,1vw,16px);letter-spacing:.08em;}
+.live .dot i{width:.7vw;height:.7vw;min-width:8px;min-height:8px;background:var(--ok);border-radius:50%;animation:pulse 1.6s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.live .clock{font-variant-numeric:tabular-nums;font-size:clamp(20px,2.1vw,38px);font-weight:700;margin-top:.6vw;color:#fff;}
+.live .date{font-size:clamp(11px,1vw,15px);color:var(--muted);}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1vw;margin-bottom:1.8vw;}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1.3vw 1.4vw;}
+.stat .lab{font-size:clamp(11px,1vw,16px);color:var(--muted);letter-spacing:.04em;}
+.stat .val{font-family:'Lora',serif;font-weight:700;font-size:clamp(26px,3.3vw,58px);color:#fff;line-height:1;margin-top:.5vw;font-variant-numeric:tabular-nums;}
+.stat .val small{font-family:'Be Vietnam Pro';font-size:.4em;font-weight:600;color:var(--gold);}
+.stat.quorum{background:linear-gradient(135deg,#1a5a3d,#164d34);border-color:rgba(127,199,155,.5);}
+.stat.quorum .val{color:var(--ok);}
+.stat .foot{font-size:clamp(10px,.95vw,14px);color:var(--muted);margin-top:.5vw;}
+
+.grid{display:grid;grid-template-columns:1.5fr 1fr;gap:1.4vw;}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:1.6vw 1.7vw;}
+.card h2{font-family:'Lora',serif;font-weight:700;font-size:clamp(18px,1.9vw,32px);color:#fff;
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:1.2vw;}
+.card h2 span{font-family:'Be Vietnam Pro';font-size:.55em;font-weight:500;color:var(--muted);letter-spacing:.03em;}
+
+.cand{margin-bottom:1.15vw;}
+.cand:last-child{margin-bottom:0;}
+.cand .row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.5vw;gap:12px;}
+.cand .nm{font-weight:600;font-size:clamp(14px,1.35vw,24px);color:var(--cream);display:flex;align-items:center;gap:.7vw;}
+.cand .rk{flex:0 0 auto;width:clamp(24px,2vw,38px);height:clamp(24px,2vw,38px);border-radius:9px;
+  background:rgba(216,189,139,.16);color:var(--gold);font-weight:700;font-size:clamp(12px,1.1vw,18px);
+  display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;}
+.cand .figs{font-variant-numeric:tabular-nums;font-size:clamp(13px,1.2vw,21px);color:var(--muted);white-space:nowrap;}
+.cand .figs b{color:#fff;font-weight:700;}
+.bar{height:clamp(12px,1.15vw,20px);background:rgba(255,255,255,.07);border-radius:999px;overflow:hidden;}
+.bar>i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--gold2),var(--gold));}
+.cand.elected .rk{background:var(--gold2);color:#3a2c0a;}
+.cand.elected .bar>i{background:linear-gradient(90deg,#7fc79b,#a9dcbb);}
+.cand.elected .nm::after{content:"";}
+
+.qlvh{display:flex;flex-direction:column;gap:1.1vw;}
+.seg{border:1px solid var(--line);border-radius:14px;padding:1.1vw 1.2vw;}
+.seg .top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.6vw;}
+.seg .nm{font-weight:600;font-size:clamp(14px,1.3vw,22px);}
+.seg .pct{font-family:'Lora',serif;font-weight:700;font-size:clamp(22px,2.4vw,40px);font-variant-numeric:tabular-nums;}
+.seg .m2{font-size:clamp(11px,1vw,15px);color:var(--muted);font-variant-numeric:tabular-nums;}
+.seg.ok{background:rgba(127,199,155,.10);border-color:rgba(127,199,155,.35);}
+.seg.ok .pct{color:var(--ok);}
+.seg.no{background:rgba(224,135,107,.10);border-color:rgba(224,135,107,.35);}
+.seg.no .pct{color:var(--no);}
+.seg.abs .pct{color:var(--abs);}
+
+footer{margin-top:1.8vw;border-top:1px solid var(--line);padding-top:1.1vw;
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-size:clamp(10px,.95vw,14px);color:var(--muted);}
+footer b{color:var(--gold);font-weight:600;}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr);}.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="kick">Hội nghị nhà chung cư · Tòa Jasmine</div>
+      <h1>Kết quả biểu quyết trực tiếp</h1>
+      <div class="sub">Phiên bầu Ban Quản trị &amp; biểu quyết đơn vị quản lý vận hành</div>
+    </div>
+    <div class="live">
+      <span class="dot"><i></i> Đang cập nhật</span>
+      <div class="clock" id="clock">--:--:--</div>
+      <div class="date" id="date"></div>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat quorum">
+      <div class="lab">Tỷ lệ tham dự (theo m²)</div>
+      <div class="val" id="quorumPct">61,0<small>%</small></div>
+      <div class="foot">Đã đủ điều kiện tổ chức (&gt; 50%)</div>
+    </div>
+    <div class="stat">
+      <div class="lab">Diện tích đã bỏ phiếu</div>
+      <div class="val">24.600 <small>m²</small></div>
+      <div class="foot">Trên tổng 40.337 m² đủ điều kiện</div>
+    </div>
+    <div class="stat">
+      <div class="lab">Số căn đã bỏ phiếu</div>
+      <div class="val">298<small>/491</small></div>
+      <div class="foot">Còn lại 193 căn chưa bỏ</div>
+    </div>
+    <div class="stat">
+      <div class="lab">Số ứng viên được bầu</div>
+      <div class="val">3<small>/5</small></div>
+      <div class="foot">Chọn tối đa 3 thành viên BQT</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Bầu Ban Quản trị <span>Số phiếu tính theo diện tích (m²)</span></h2>
+      <div id="cands"></div>
+    </div>
+    <div class="card">
+      <h2>Tiếp tục đơn vị vận hành? <span>Tỷ lệ theo m²</span></h2>
+      <div class="qlvh">
+        <div class="seg ok">
+          <div class="top"><span class="nm">Đồng ý tiếp tục</span><span class="pct">61%</span></div>
+          <div class="m2">15.100 m² / 24.600 m²</div>
+        </div>
+        <div class="seg no">
+          <div class="top"><span class="nm">Không đồng ý</span><span class="pct">29%</span></div>
+          <div class="m2">7.200 m² / 24.600 m²</div>
+        </div>
+        <div class="seg abs">
+          <div class="top"><span class="nm">Không có ý kiến</span><span class="pct">10%</span></div>
+          <div class="m2">2.300 m² / 24.600 m²</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>Kết quả tính theo <b>diện tích sở hữu riêng — 1 m² được tính theo m² của căn hộ bầu</b>. Số liệu cập nhật theo thời gian thực.</div>
+    <div>Toàn bộ quá trình được <b>ghi hình</b> và lưu nhật ký · Bản thiết kế mẫu</div>
+  </footer>
+</div>
+
+<script>
+const CANDS=[
+  {n:"Nguyễn Văn Hải",m2:18500,elected:true},
+  {n:"Lê Minh Quân",m2:16200,elected:true},
+  {n:"Đỗ Anh Tuấn",m2:14800,elected:true},
+  {n:"Trần Thị Thu Hương",m2:9300,elected:false},
+  {n:"Phạm Thị Ngọc Lan",m2:6100,elected:false},
+];
+const CAST=24600, MAXBAR=Math.max(...CANDS.map(c=>c.m2));
+const fmt=n=>n.toLocaleString('vi-VN');
+document.getElementById('cands').innerHTML=CANDS.map((c,i)=>{
+  const pct=Math.round(c.m2/CAST*100);
+  const w=Math.round(c.m2/MAXBAR*100);
+  return `<div class="cand ${c.elected?'elected':''}">
+    <div class="row">
+      <span class="nm"><span class="rk">${i+1}</span>${c.n}</span>
+      <span class="figs"><b>${fmt(c.m2)} m²</b> · ${pct}%</span>
+    </div>
+    <div class="bar"><i style="width:${w}%"></i></div>
+  </div>`;
+}).join('');
+
+function tick(){
+  const d=new Date();
+  const p=n=>String(n).padStart(2,'0');
+  document.getElementById('clock').textContent=`${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+  const days=['Chủ nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+  document.getElementById('date').textContent=`${days[d.getDay()]}, ${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()}`;
+}
+tick();setInterval(tick,1000);
+</script>
+</body>
+</html>

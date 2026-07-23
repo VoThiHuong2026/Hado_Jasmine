@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phiếu biểu quyết điện tử — Hội nghị nhà chung cư Jasmine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#1c5138;--green2:#2f6f4e;--greenSoft:#eef4ef;--gold:#b0894b;--goldSoft:#f3ead6;
+  --ink:#242625;--soft:#5c5f5c;--paper:#faf8f2;--card:#fff;--line:#e4dece;
+  --ok:#2f7d4f;--okSoft:#e7f3ea;--no:#b4472e;--noSoft:#f8ebe6;--abs:#7a7768;--absSoft:#f0eee6;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--paper);color:var(--ink);font-family:'Be Vietnam Pro',sans-serif;
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 40px;}
+.shell{width:100%;max-width:760px;}
+header{text-align:center;margin-bottom:22px;}
+.kick{font-size:12px;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;font-weight:600;}
+header h1{font-family:'Lora',serif;font-weight:700;font-size:clamp(24px,4.5vw,36px);color:var(--green);margin-top:8px;}
+header p{color:var(--soft);font-size:15px;margin-top:6px;}
+
+.steps{display:flex;gap:8px;margin-bottom:22px;}
+.steps .s{flex:1;text-align:center;font-size:12.5px;font-weight:600;color:var(--soft);
+  padding:10px 6px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line);position:relative;}
+.steps .s .n{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--greenSoft);
+  color:var(--green);align-items:center;justify-content:center;font-size:12px;margin-right:6px;}
+.steps .s.active{background:var(--green);color:#fff;border-color:var(--green);}
+.steps .s.active .n{background:rgba(255,255,255,.22);color:#fff;}
+.steps .s.done{border-color:var(--green2);color:var(--green);}
+.steps .s.done .n{background:var(--green);color:#fff;}
+@media(max-width:560px){.steps .s{font-size:0;}.steps .s .n{margin:0;width:26px;height:26px;font-size:13px;}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 10px 30px rgba(28,81,56,.06);}
+.pane{display:none;} .pane.on{display:block;animation:fade .25s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2{font-family:'Lora',serif;font-size:23px;color:var(--green);margin-bottom:6px;}
+.hint{color:var(--soft);font-size:14.5px;margin-bottom:18px;}
+
+.search{width:100%;padding:15px 16px;font-size:16px;font-family:inherit;border:1.5px solid var(--line);
+  border-radius:12px;background:#fff;color:var(--ink);margin-bottom:14px;}
+.search:focus{outline:none;border-color:var(--green2);}
+.units{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;max-height:280px;overflow:auto;padding:2px;}
+.unit{border:1.5px solid var(--line);border-radius:12px;padding:13px 12px;cursor:pointer;background:#fff;text-align:left;font-family:inherit;transition:.12s;}
+.unit:hover{border-color:var(--green2);}
+.unit .mc{font-weight:700;font-size:16px;color:var(--ink);}
+.unit .m2{font-size:12.5px;color:var(--soft);margin-top:3px;}
+.unit.sel{border-color:var(--green);background:var(--greenSoft);box-shadow:0 0 0 3px rgba(28,81,56,.12);}
+.unit.voted{opacity:.5;cursor:not-allowed;background:#f4f2ec;}
+.unit.voted .m2{color:var(--no);}
+
+.proxy{margin-top:16px;display:flex;align-items:flex-start;gap:11px;background:var(--goldSoft);
+  border:1px solid #e6d3a8;border-radius:12px;padding:13px 15px;cursor:pointer;}
+.proxy input{width:20px;height:20px;margin-top:2px;accent-color:var(--gold);flex:0 0 auto;}
+.proxy .t{font-size:14px;color:#6b531f;} .proxy .t b{color:#4d3a12;}
+
+.selbar{background:var(--greenSoft);border:1px solid #cfe2d5;border-radius:12px;padding:12px 15px;
+  margin-bottom:18px;font-size:14.5px;color:var(--green);display:none;}
+.selbar.show{display:block;} .selbar b{font-weight:700;}
+
+.counter{display:flex;align-items:center;justify-content:space-between;background:var(--greenSoft);
+  border-radius:12px;padding:11px 15px;margin-bottom:16px;font-size:14.5px;font-weight:600;color:var(--green);}
+.counter .cap{color:var(--soft);font-weight:500;}
+.cand{display:flex;align-items:center;gap:14px;border:1.5px solid var(--line);border-radius:14px;
+  padding:15px 16px;margin-bottom:11px;cursor:pointer;background:#fff;transition:.12s;}
+.cand:hover{border-color:var(--green2);}
+.cand .box{width:26px;height:26px;border-radius:8px;border:2px solid var(--line);flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;}
+.cand .info .nm{font-weight:600;font-size:16.5px;}
+.cand .info .meta{font-size:13px;color:var(--soft);margin-top:2px;}
+.cand.sel{border-color:var(--green);background:var(--greenSoft);}
+.cand.sel .box{background:var(--green);border-color:var(--green);}
+.cand.disabled{opacity:.55;cursor:not-allowed;}
+
+.opt{display:flex;align-items:center;gap:14px;border:1.5px solid var(--line);border-radius:14px;
+  padding:17px 18px;margin-bottom:12px;cursor:pointer;background:#fff;transition:.12s;}
+.opt .radio{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);flex:0 0 auto;position:relative;}
+.opt .lab{font-weight:600;font-size:17px;}
+.opt.sel{border-width:2px;}
+.opt.sel .radio::after{content:"";position:absolute;inset:4px;border-radius:50%;}
+.opt.ok.sel{border-color:var(--ok);background:var(--okSoft);} .opt.ok.sel .radio{border-color:var(--ok);} .opt.ok.sel .radio::after{background:var(--ok);}
+.opt.no.sel{border-color:var(--no);background:var(--noSoft);} .opt.no.sel .radio{border-color:var(--no);} .opt.no.sel .radio::after{background:var(--no);}
+.opt.abs.sel{border-color:var(--abs);background:var(--absSoft);} .opt.abs.sel .radio{border-color:var(--abs);} .opt.abs.sel .radio::after{background:var(--abs);}
+
+.review{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:18px;}
+.review .r{display:flex;justify-content:space-between;gap:14px;padding:14px 16px;border-bottom:1px solid var(--line);font-size:15px;}
+.review .r:last-child{border-bottom:none;}
+.review .r .k{color:var(--soft);} .review .r .v{font-weight:600;text-align:right;}
+.review .r .v span{display:block;}
+
+.nav{display:flex;gap:12px;margin-top:22px;}
+.btn{flex:1;padding:16px;border-radius:12px;font-family:inherit;font-weight:700;font-size:16px;cursor:pointer;border:none;transition:.12s;}
+.btn.primary{background:var(--green);color:#fff;} .btn.primary:hover{background:var(--green2);}
+.btn.primary:disabled{background:#b9c7bd;cursor:not-allowed;}
+.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink);flex:0 0 auto;padding:16px 22px;}
+.btn.ghost:hover{border-color:var(--green2);}
+
+.done{text-align:center;padding:20px 10px;}
+.done .tick{width:84px;height:84px;border-radius:50%;background:var(--okSoft);color:var(--ok);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:44px;}
+.done h2{font-size:27px;margin-bottom:8px;}
+.done p{color:var(--soft);font-size:16px;margin-bottom:6px;}
+.done .big{font-family:'Lora',serif;font-size:22px;color:var(--green);font-weight:700;margin:10px 0 22px;}
+
+.footnote{text-align:center;color:var(--soft);font-size:12.5px;margin-top:18px;}
+.warn{background:var(--noSoft);border:1px solid #e6c3b7;color:var(--no);border-radius:10px;padding:11px 14px;font-size:13.5px;margin-top:12px;display:none;}
+.warn.show{display:block;}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="kick">Hội nghị nhà chung cư · Tòa Jasmine</div>
+    <h1>Phiếu biểu quyết điện tử</h1>
+    <p>Vui lòng chọn căn hộ của bạn và thực hiện biểu quyết</p>
+  </header>
+
+  <div class="steps">
+    <div class="s active" data-s="0"><span class="n">1</span>Chọn căn</div>
+    <div class="s" data-s="1"><span class="n">2</span>Bầu BQT</div>
+    <div class="s" data-s="2"><span class="n">3</span>Đơn vị vận hành</div>
+    <div class="s" data-s="3"><span class="n">4</span>Xác nhận</div>
+  </div>
+
+  <div class="card">
+    <!-- STEP 1 -->
+    <div class="pane on" id="p0">
+      <h2>Chọn mã căn hộ</h2>
+      <div class="hint">Danh tính đã được xác minh tại bàn tiếp đón. Vui lòng chọn đúng căn hộ của bạn.</div>
+      <input class="search" id="search" placeholder="🔍 Tìm mã căn, ví dụ: J2-12">
+      <div class="units" id="units"></div>
+      <label class="proxy">
+        <input type="checkbox" id="proxy">
+        <span class="t"><b>Tôi là người được ủy quyền</b> bỏ phiếu thay chủ sở hữu (đã nộp giấy ủy quyền hợp lệ).</span>
+      </label>
+      <div class="warn" id="w0">Vui lòng chọn mã căn hộ để tiếp tục.</div>
+      <div class="nav">
+        <button class="btn primary" id="next0">Tiếp tục</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="pane" id="p1">
+      <h2>Bầu Ban Quản trị</h2>
+      <div class="hint">Chọn <b>tối đa 3</b> ứng viên bạn tín nhiệm.</div>
+      <div class="counter"><span id="cnt">Đã chọn 0/3</span><span class="cap">Có thể chọn ít hơn 3</span></div>
+      <div id="cands"></div>
+      <div class="nav">
+        <button class="btn ghost" data-back>Quay lại</button>
+        <button class="btn primary" id="next1">Tiếp tục</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="pane" id="p2">
+      <h2>Tiếp tục sử dụng đơn vị quản lý vận hành?</h2>
+      <div class="hint">Chọn một phương án biểu quyết.</div>
+      <div class="opt ok" data-v="Đồng ý tiếp tục"><span class="radio"></span><span class="lab">Đồng ý tiếp tục</span></div>
+      <div class="opt no" data-v="Không đồng ý"><span class="radio"></span><span class="lab">Không đồng ý</span></div>
+      <div class="opt abs" data-v="Không có ý kiến"><span class="radio"></span><span class="lab">Không có ý kiến</span></div>
+      <div class="warn" id="w2">Vui lòng chọn một phương án.</div>
+      <div class="nav">
+        <button class="btn ghost" data-back>Quay lại</button>
+        <button class="btn primary" id="next2">Tiếp tục</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="pane" id="p3">
+      <h2>Xem lại &amp; xác nhận</h2>
+      <div class="hint">Kiểm tra lại lựa chọn. Sau khi xác nhận sẽ không sửa được.</div>
+      <div class="review" id="review"></div>
+      <div class="nav">
+        <button class="btn ghost" data-back>Quay lại</button>
+        <button class="btn primary" id="submit">Xác nhận &amp; gửi phiếu</button>
+      </div>
+    </div>
+
+    <!-- DONE -->
+    <div class="pane" id="p4">
+      <div class="done">
+        <div class="tick">✓</div>
+        <h2>Đã ghi nhận phiếu bầu</h2>
+        <p>Cảm ơn bạn đã tham gia biểu quyết.</p>
+        <div class="big" id="doneUnit"></div>
+        <button class="btn primary" style="max-width:280px;margin:0 auto" id="reset">Phiếu tiếp theo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footnote">Phiếu tính theo diện tích sở hữu riêng · Mỗi căn bỏ phiếu một lần · Bản thiết kế mẫu</div>
+</div>
+
+<script>
+const p2=n=>String(n).padStart(2,'0');
+const UNITS=(()=>{
+  const out=[];
+  const J1A=[60,86,107,86,60,107,86,60,107,86,60]; // 11 căn/sàn
+  for(let f=6;f<=29;f++)for(let u=0;u<11;u++)out.push({mc:`J1-${p2(f)}.${p2(u+1)}`,m2:J1A[u]});
+  for(let u=0;u<6;u++)out.push({mc:`J1-30.${p2(u+1)}`,m2:J1A[u]}); // tầng 30 (~270 căn)
+  const J2A=[60,86,107,86,60,107,86,60,86]; // 9 căn/sàn
+  for(let f=6;f<=29;f++)for(let u=0;u<9;u++)out.push({mc:`J2-${p2(f)}.${p2(u+1)}`,m2:J2A[u]});
+  for(let u=0;u<5;u++)out.push({mc:`J2-30.${p2(u+1)}`,m2:J2A[u]}); // tầng 30 (~221 căn)
+  return out;
+})();
+const VOTED=(()=>{ const pool=UNITS.filter(u=>u.mc.startsWith("J1-06")); const s=new Set(); while(s.size<3&&s.size<pool.length){ s.add(pool[Math.floor(Math.random()*pool.length)].mc); } return s; })(); // demo: 3 căn ngẫu nhiên trong tầng J1-06 đã bỏ phiếu (khóa)
+const CANDS=[
+  {n:"Nguyễn Văn Hải",u:"Căn hộ J1-15.07"},
+  {n:"Trần Thị Thu Hương",u:"Căn hộ J2-08.03"},
+  {n:"Lê Minh Quân",u:"Căn hộ J1-12.03"},
+  {n:"Phạm Thị Ngọc Lan",u:"Căn hộ J2-14.06"},
+  {n:"Đỗ Anh Tuấn",u:"Căn hộ J1-18.01"},
+];
+const MAXPICK=3;
+let sel={unit:null,proxy:false,picks:new Set(),qlvh:null};
+const $=id=>document.getElementById(id);
+
+function renderUnits(f=""){
+  const q=f.trim().toUpperCase();
+  $("units").innerHTML=UNITS.filter(u=>u.mc.toUpperCase().includes(q)).map(u=>{
+    const voted=VOTED.has(u.mc), on=sel.unit===u.mc;
+    return `<button class="unit ${voted?'voted':''} ${on?'sel':''}" ${voted?'disabled':''} data-mc="${u.mc}" data-m2="${u.m2}">
+      <div class="mc">${u.mc}</div><div class="m2">${voted?'Đã bỏ phiếu':u.m2+' m²'}</div></button>`;
+  }).join('') || `<div style="color:var(--soft);font-size:14px;padding:8px">Không tìm thấy mã căn phù hợp.</div>`;
+}
+renderUnits();
+$("search").addEventListener('input',e=>renderUnits(e.target.value));
+$("units").addEventListener('click',e=>{
+  const b=e.target.closest('.unit'); if(!b||b.classList.contains('voted'))return;
+  sel.unit=b.dataset.mc; sel.m2=+b.dataset.m2; renderUnits($("search").value);
+});
+$("proxy").addEventListener('change',e=>sel.proxy=e.target.checked);
+
+$("cands").innerHTML=CANDS.map(c=>`<div class="cand" data-c="${c.n}">
+  <div class="box">✓</div><div class="info"><div class="nm">${c.n}</div><div class="meta">Ứng cử viên Ban Quản trị · ${c.u}</div></div></div>`).join('');
+function refreshCands(){
+  const full=sel.picks.size>=MAXPICK;
+  document.querySelectorAll('.cand').forEach(el=>{
+    const on=sel.picks.has(el.dataset.c);
+    el.classList.toggle('sel',on);
+    el.classList.toggle('disabled',!on&&full);
+  });
+  $("cnt").textContent=`Đã chọn ${sel.picks.size}/${MAXPICK}`;
+}
+$("cands").addEventListener('click',e=>{
+  const el=e.target.closest('.cand'); if(!el)return; const c=el.dataset.c;
+  if(sel.picks.has(c))sel.picks.delete(c);
+  else if(sel.picks.size<MAXPICK)sel.picks.add(c);
+  refreshCands();
+});
+
+document.querySelectorAll('#p2 .opt').forEach(o=>o.addEventListener('click',()=>{
+  document.querySelectorAll('#p2 .opt').forEach(x=>x.classList.remove('sel'));
+  o.classList.add('sel'); sel.qlvh=o.dataset.v; $("w2").classList.remove('show');
+}));
+
+function show(n){
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  $("p"+n).classList.add('on');
+  document.querySelectorAll('.steps .s').forEach(s=>{
+    const i=+s.dataset.s; s.classList.toggle('active',i===n);
+    s.classList.toggle('done',i<n);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+$("next0").onclick=()=>{ if(!sel.unit){$("w0").classList.add('show');return;} $("w0").classList.remove('show'); show(1); refreshCands(); };
+$("next1").onclick=()=>show(2);
+$("next2").onclick=()=>{ if(!sel.qlvh){$("w2").classList.add('show');return;} buildReview(); show(3); };
+document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>{
+  const cur=[...document.querySelectorAll('.pane')].findIndex(p=>p.classList.contains('on'));
+  show(cur-1);
+});
+function buildReview(){
+  const picks=[...sel.picks]; 
+  $("review").innerHTML=`
+    <div class="r"><span class="k">Mã căn hộ</span><span class="v">${sel.unit} <span style="font-weight:400;color:var(--soft);font-size:13px">${sel.m2} m² · ${sel.proxy?'Bỏ phiếu ủy quyền':'Chủ sở hữu'}</span></span></div>
+    <div class="r"><span class="k">Bầu Ban Quản trị</span><span class="v">${picks.length?picks.map(p=>`<span>${p}</span>`).join(''):'<span style="color:var(--soft);font-weight:400">Không bầu ai</span>'}</span></div>
+    <div class="r"><span class="k">Đơn vị vận hành</span><span class="v">${sel.qlvh}</span></div>`;
+}
+$("submit").onclick=()=>{ VOTED.add(sel.unit); $("doneUnit").textContent="Căn "+sel.unit; show(4); };
+$("reset").onclick=()=>{
+  sel={unit:null,proxy:false,picks:new Set(),qlvh:null};
+  $("search").value=""; $("proxy").checked=false; renderUnits();
+  document.querySelectorAll('#p2 .opt').forEach(x=>x.classList.remove('sel'));
+  show(0);
+};
+
+document.querySelectorAll('.steps .s').forEach(s=>{
+  s.style.cursor='pointer';
+  s.addEventListener('click',()=>{
+    const n=+s.dataset.s;
+    if(n>=1 && !sel.unit){ show(0); $("w0").classList.add('show'); return; }
+    if(n===3 && !sel.qlvh){ show(2); $("w2").classList.add('show'); return; }
+    if(n>=1) refreshCands();
+    if(n===3) buildReview();
+    show(n);
+  });
+});
+</script>
+</body>
+</html>
