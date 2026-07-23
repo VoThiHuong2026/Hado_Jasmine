@@ -371,6 +371,20 @@ details[open] .tl-sum::after{transform:rotate(180deg);}
 .timeline .tl-c{flex:1 1 auto;min-width:0;}
 .sortmob{display:none;}
 @media(max-width:819px){ .sortmob{display:inline;} .sortnote{display:none;} }
+.detailbtn{width:100%;margin-top:10px;background:#eef4ef;border:1.5px solid #cfe2d5;color:#1c5138;font-family:inherit;font-weight:700;font-size:15.5px;padding:14px;border-radius:12px;cursor:pointer;min-height:54px;}
+.detailbtn:hover{border-color:#2f6f4e;}
+.bgrp{border:1px solid #e4dece;border-radius:10px;margin-top:8px;background:#fff;overflow:hidden;}
+.bgrp>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 13px;min-height:48px;}
+.bgrp>summary::-webkit-details-marker{display:none;}
+.bgrp>summary::after{content:"▾";color:#8a6d2f;transition:transform .2s;margin-left:6px;flex:0 0 auto;}
+.bgrp[open]>summary::after{transform:rotate(180deg);}
+.bgrp .bg-name{font-weight:700;color:#1c5138;font-size:13.5px;}
+.bgrp .bg-val{color:#5c5f5c;white-space:nowrap;font-variant-numeric:tabular-nums;font-size:12px;flex:0 0 auto;}
+.fund-row.sub{padding:9px 13px;border-bottom:1px solid #f0eee6;background:#faf8f2;align-items:flex-start;gap:10px;}
+.fund-row.sub span{font-size:12.5px;color:#3c423f;}
+.fund-row.sub b{font-weight:600;color:#5c5f5c;font-size:11.5px;white-space:nowrap;font-variant-numeric:tabular-nums;}
+a.fd{text-decoration:none;cursor:pointer;transition:border-color .12s,background .12s;}
+a.fd:hover{border-color:#1c5138;background:#eef4ef;}
 </style>
 </head>
 <body>
@@ -472,13 +486,12 @@ details[open] .tl-sum::after{transform:rotate(180deg);}
 
   <div class="tabpane" id="tab-fin">
     <div class="panel">
-      <h2>Báo cáo tài chính &amp; quỹ bảo trì</h2>
+      <h2>Báo cáo tài chính (thu – chi vận hành)</h2>
       <p class="sub">Công khai thu – chi vận hành và tình hình quỹ bảo trì để cư dân giám sát.</p>
       <div class="finctrl">
         <label>Kỳ báo cáo:</label>
         <select id="finPeriod" onchange="renderFinance()">
-          <option value="q3-2026">Quý III / 2026</option>
-          <option value="q2-2026">Quý II / 2026</option>
+          <option value="y2026">Năm tài chính 07/2025 – 06/2026</option>
         </select>
       </div>
       <div id="finBody"></div>
@@ -492,8 +505,7 @@ details[open] .tl-sum::after{transform:rotate(180deg);}
       <div class="finctrl">
         <label>Kỳ báo cáo:</label>
         <select id="mfPeriod" onchange="renderFund()">
-          <option value="q3-2026">Quý III / 2026</option>
-          <option value="q2-2026">Quý II / 2026</option>
+          <option value="to063026">Lũy kế đến 30/6/2026</option>
         </select>
       </div>
       <div id="fundBody"></div>
@@ -549,71 +561,162 @@ function showTab(which){
     if(target){ const y = target.getBoundingClientRect().top + window.scrollY - (mobile?8:6); window.scrollTo({top:Math.max(0,y), behavior:"smooth"}); }
   });
 }
-const FINANCE={
- "q3-2026":{label:"Quý III/2026",fundOpen:12450000000,fundInt:62000000,fundSpend:180000000,opOpen:320000000,fundItems:[["Sơn & chống thấm sảnh, hành lang",95000000],["Thay thiết bị hệ thống bơm nước",52000000],["Sửa chữa hệ thống PCCC phần chung",33000000]],
-   income:[["Phí quản lý vận hành",1240000000],["Phí giữ xe",385000000],["Cho thuê mặt bằng & quảng cáo",156000000],["Lãi ngân hàng & khác",24000000]],
-   expense:[["Bảo vệ – an ninh",372000000],["Vệ sinh",268000000],["Điện – nước khu vực chung",246000000],["Bảo trì thang máy",145000000],["Cây xanh – cảnh quan",92000000],["An toàn PCCC",78000000],["Sửa chữa nhỏ",120000000],["Quản lý – hành chính",210000000]]},
- "q2-2026":{label:"Quý II/2026",fundOpen:12360000000,fundInt:58000000,fundSpend:95000000,opOpen:295000000,fundItems:[["Bảo trì lớn thang máy (phần chung)",60000000],["Sửa hệ thống chiếu sáng khu vực chung",35000000]],
-   income:[["Phí quản lý vận hành",1225000000],["Phí giữ xe",372000000],["Cho thuê mặt bằng & quảng cáo",150000000],["Lãi ngân hàng & khác",22000000]],
-   expense:[["Bảo vệ – an ninh",368000000],["Vệ sinh",262000000],["Điện – nước khu vực chung",231000000],["Bảo trì thang máy",140000000],["Cây xanh – cảnh quan",90000000],["An toàn PCCC",72000000],["Sửa chữa nhỏ",64000000],["Quản lý – hành chính",205000000]]}
+const RF={
+ fin:{
+   income:[["Phí quản lý",8756299680],["Nguồn thu bãi xe",3230452553],["Khai thác khu vực chung & thu khác",914338828]],
+   incomeTotal:12901091061, incomeBudget:13255990248,
+   expense:[["Chi phí hành chính / NS QLVH",4961107198],["Chi phí dịch vụ",4780872835],["Chi phí năng lượng",2005249425],["Vận hành, bảo dưỡng hệ thống",102550626],["Mua sắm trang thiết bị, CCDC",53102000],["Thuế GTGT phải nộp",119667655]],
+   expenseTotal:12022549739, allowanceBQT:570000000, toReserve:521655300,
+   balancePeriod:-213113978, balanceCumulative:-281840824,
+   survey:[["Tháng 11/2023","96,01%"],["Tháng 5/2024","92,23%"],["Tháng 12/2024","96,71%"],["Tháng 6/2025","98,2%"],["Tháng 6/2026","93,95%"]],
+   surveyAvg:"79,46% → 90,08% → 81,75%", surveyHi:"Bảo vệ (92,99%)", surveyLo:"Xử lý côn trùng (74,78%)"
+ },
+ fund:{
+   received:[["2% quỹ bảo trì 510 căn hộ (gốc)",36948050000],["Tiền lãi phát sinh khi nhận bàn giao",3685529242],["Trừ: CĐT đã chi bảo trì 11/2021 – 10/2023",-1921216584],["Trừ: CĐT chi sau 31/10/2023",-62797508]],
+   receivedSub510:38649565150, z756:834860000, advance:150000000, receivedTotal:39634425150,
+   inflow:[["Đã tạm nhận từ Chủ đầu tư đến 30/6/2026",39634425150],["Lãi tiền gửi lũy kế đến 31/12/2024",163858968],["Lãi tiền gửi lũy kế đến 31/12/2025",1804161028],["Lãi tiền gửi lũy kế đến 30/6/2026",2613696976],["Lãi không kỳ hạn (10/2023 – 6/2026)",10895136],["Khai thác khu vực chung (đã trừ chi phí)",180547840]],
+   inflowTotal:44407585098,
+   outflow:[["Thực chi quỹ bảo trì đến 30/6/2026",8343831634],["Phí chuyển khoản & quản lý tài khoản",21776943]],
+   outflowTotal:8365608577, balance:36041976521,
+   balanceParts:[["Hợp đồng tiền gửi có kỳ hạn",35801248514],["Tiền gửi thanh toán",59037444],["Tiền mặt (két sắt BQT)",1142723],["Nguồn khai thác khu vực chung",180547840]],
+   spendByPeriod:[["Đến 31/12/2024",1960102506],["Năm 2025",3969023444],["01/01 – 30/6/2026",2414705684]],
+   spendBySystem:[["Thang máy",4269566186,"51%"],["Hệ thống PCCC",983406620,"12%"],["Xử lý nước thải",390245800,"5%"],["Chiếu sáng",290719032,"3%"]],
+   budget:{approved:4633448210,done:2540254688,unused:2093193522,pct:"55%",groups:[
+     {name:"A – Bảo trì định kỳ",ns:1306355310,th:1072482201,pct:"82%",items:[
+       ["Bảo trì thang máy",427650300,419265000,"98%"],
+       ["Bảo trì máy phát điện",37128000,35000000,"94%"],
+       ["Bảo trì hệ thống PCCC",289519350,271060000,"94%"],
+       ["Access Control, Intercom, giám sát thang bộ, Camera",147043200,141440000,"96%"],
+       ["Hệ thống kiểm soát xe (Car-parking)",89120460,88717201,"100%"],
+       ["Hệ thống xử lý nước thải",160650000,117000000,"73%"],
+       ["Hệ thống MSB – Busway",122400000,0,"0%"],
+       ["Điều hòa không khí công cộng",7344000,0,"0%"],
+       ["Quạt thông gió công cộng",25500000,0,"0%"]]},
+     {name:"B – Sửa chữa theo khuyến cáo",ns:572382384,th:234227988,pct:"41%",items:[
+       ["Thiết bị hạng mục xây dựng",213375840,75923000,"36%"],
+       ["Hệ thống hồ bơi & phòng chức năng",191148000,6000000,"3%"],
+       ["Vật tư, thiết bị PCCC",48008544,45460000,"95%"],
+       ["Access Control, Intercom, giám sát thang bộ",40800000,36906182,"90%"],
+       ["Hệ thống kiểm soát xe (Car-parking)",32640000,32197806,"99%"],
+       ["Vật tư, thiết bị điện, đèn chiếu sáng",46410000,37741000,"81%"]]},
+     {name:"C – Dự trù sửa chữa",ns:2754710516,th:1233544499,pct:"45%",items:[
+       ["Thiết bị hạng mục xây dựng",739628000,364493639,"49%"],
+       ["Hệ thống hồ bơi & phòng chức năng",82000000,17563636,"21%"],
+       ["Hệ thống thang máy",162000000,90988000,"56%"],
+       ["Vật tư, phụ tùng máy phát điện",45000000,37440000,"83%"],
+       ["Vật tư, thiết bị PCCC",362635516,298283630,"82%"],
+       ["Access Control, Intercom, giám sát thang bộ",140900000,7200000,"5%"],
+       ["Hệ thống giám sát Camera (CCTV)",263100000,60100000,"23%"],
+       ["Hệ thống kiểm soát xe (Car-parking)",200863000,18023194,"9%"],
+       ["XLNT, cấp thoát nước, bơm, hồ tiểu cảnh, tưới",393050000,266327000,"68%"],
+       ["Vật tư, thiết bị điện, đèn chiếu sáng",260630000,67588400,"26%"],
+       ["Hệ thống thông gió – lạnh",104904000,5537000,"5%"]]}
+   ]},
+   deposits:[["BIDV – CN Sài Gòn",1698375000,"8%/năm"],["BIDV – CN 3 Tháng 2",12797604514,"6,7% & 6%/năm"],["MBBank – CN Bến Thành",10000000000,"7,7%/năm"],["HDBank – CN Cộng Hòa",11305269000,"7,7%/năm"]],
+   depositsTotal:35801248514,
+   reserve:{income:952184826,expense:774549737,balance:177635089}
+ }
 };
 function vnd(n){return n.toLocaleString('vi-VN')+" đ";}
 function vndShort(n){ const a=Math.abs(n); if(a>=1e9){ return (Math.round(n/1e9*100)/100).toLocaleString('vi-VN')+" tỷ"; } if(a>=1e6){ return Math.round(n/1e6).toLocaleString('vi-VN')+" triệu"; } return n.toLocaleString('vi-VN'); }
-function renderFund(){
-  const sel=document.getElementById("mfPeriod"); if(!sel)return; const d=FINANCE[sel.value]; if(!d)return;
-  const fundClose=d.fundOpen+d.fundInt-d.fundSpend;
-  document.getElementById("fundBody").innerHTML=`
-    <div class="fin-cards">
-      <div class="fin-c fund"><div class="fc-l">Số dư đầu kỳ</div><div class="fc-n">${vndShort(d.fundOpen)} đ</div><div class="fc-sub">${vnd(d.fundOpen)}</div></div>
-      <div class="fin-c inc"><div class="fc-l">Lãi & phát sinh trong kỳ</div><div class="fc-n">+ ${vndShort(d.fundInt)} đ</div><div class="fc-sub">+ ${vnd(d.fundInt)}</div></div>
-      <div class="fin-c exp"><div class="fc-l">Chi từ quỹ bảo trì</div><div class="fc-n">− ${vndShort(d.fundSpend)} đ</div><div class="fc-sub">− ${vnd(d.fundSpend)}</div></div>
-      <div class="fin-c bal"><div class="fc-l">Số dư cuối kỳ</div><div class="fc-n">${vndShort(fundClose)} đ</div><div class="fc-sub">${vnd(fundClose)}</div></div>
-    </div>
-    <div class="fund-box">
-      <h3>🏦 Diễn giải quỹ bảo trì 2% (tài khoản riêng)</h3>
-      <div class="fund-row"><span>Số dư đầu kỳ</span><b>${vnd(d.fundOpen)}</b></div>
-      <div class="fund-row"><span>+ Lãi & phát sinh</span><b class="pos">+ ${vnd(d.fundInt)}</b></div>
-      <div class="fund-row"><span>− Chi từ quỹ bảo trì</span><b class="neg">− ${vnd(d.fundSpend)}</b></div>
-      <div class="fund-row total"><span>Số dư cuối kỳ</span><b>${vnd(fundClose)}</b></div>
-      <div class="fund-note">Quỹ bảo trì được quản lý trong tài khoản riêng, chỉ chi cho hạng mục bảo trì phần sở hữu chung theo quy định.</div>
-    </div>
-    <div class="fin-block" style="margin-bottom:18px">
-      <h3>🔧 Các khoản chi từ quỹ bảo trì trong kỳ</h3>
-      ${d.fundItems.map(x=>`<div class="fund-row"><span>${x[0]}</span><b>${vnd(x[1])}</b></div>`).join("")}
-      <div class="fin-total">Tổng chi quỹ bảo trì: <b>${vnd(d.fundSpend)}</b></div>
-    </div>
-    <div class="fin-docs">
-      <div class="fd-h">📎 Tài liệu chi tiết</div>
-      <span class="fd">📄 Sao kê tài khoản quỹ bảo trì ${d.label}</span>
-      <span class="fd">📄 Biên bản &amp; chứng từ các khoản chi</span>
-    </div>
-    <div class="note" style="margin-top:14px">🔒 Số liệu trên là <b>minh hoạ (bản mẫu)</b>. Báo cáo quỹ bảo trì chính thức do Ban Quản trị công bố định kỳ kèm sao kê và chứng từ.</div>`;
-}
 function renderFinance(){
-  const sel=document.getElementById("finPeriod"); if(!sel)return; const d=FINANCE[sel.value]; if(!d)return;
-  const tIn=d.income.reduce((s,x)=>s+x[1],0), tEx=d.expense.reduce((s,x)=>s+x[1],0);
-  const fundClose=d.fundOpen+d.fundInt-d.fundSpend, opClose=d.opOpen+tIn-tEx;
+  const d=RF.fin, tIn=d.incomeTotal, tEx=d.expenseTotal, bal=d.balancePeriod;
   const maxIn=Math.max.apply(null,d.income.map(x=>x[1])), maxEx=Math.max.apply(null,d.expense.map(x=>x[1]));
   const rows=(arr,tot,max,cls)=>arr.map(x=>`<div class="fin-row"><div class="fr-top"><span class="fr-l">${x[0]}</span><span class="fr-v">${vnd(x[1])} <em>· ${Math.round(x[1]/tot*100)}%</em></span></div><div class="fr-bar"><i class="${cls}" style="width:${Math.round(x[1]/max*100)}%"></i></div></div>`).join("");
   document.getElementById("finBody").innerHTML=`
     <div class="fin-cards">
-      <div class="fin-c fund"><div class="fc-l">Số dư quỹ bảo trì (cuối kỳ)</div><div class="fc-n">${vndShort(fundClose)} đ</div><div class="fc-sub">${vnd(fundClose)}</div></div>
-      <div class="fin-c inc"><div class="fc-l">Tổng thu vận hành</div><div class="fc-n">${vndShort(tIn)} đ</div><div class="fc-sub">${vnd(tIn)}</div></div>
-      <div class="fin-c exp"><div class="fc-l">Tổng chi vận hành</div><div class="fc-n">${vndShort(tEx)} đ</div><div class="fc-sub">${vnd(tEx)}</div></div>
-      <div class="fin-c bal"><div class="fc-l">Tồn quỹ vận hành (cuối kỳ)</div><div class="fc-n">${vndShort(opClose)} đ</div><div class="fc-sub">${vnd(opClose)}</div></div>
+      <div class="fin-c inc"><div class="fc-l">Tổng thu vận hành (năm)</div><div class="fc-n">${vndShort(tIn)} đ</div><div class="fc-sub">${vnd(tIn)}</div></div>
+      <div class="fin-c exp"><div class="fc-l">Tổng chi vận hành (năm)</div><div class="fc-n">${vndShort(tEx)} đ</div><div class="fc-sub">${vnd(tEx)}</div></div>
+      <div class="fin-c bal"><div class="fc-l">Cân đối thu – chi trong kỳ</div><div class="fc-n" style="color:${bal<0?'#b4472e':'#2f7d4f'}">${bal<0?'− ':''}${vndShort(Math.abs(bal))} đ</div><div class="fc-sub">${bal<0?'− ':''}${vnd(Math.abs(bal))}</div></div>
+      <div class="fin-c fund"><div class="fc-l">Số dư quỹ kết dư vận hành</div><div class="fc-n">${vndShort(RF.fund.reserve.balance)} đ</div><div class="fc-sub">${vnd(RF.fund.reserve.balance)}</div></div>
     </div>
     <div class="fin-2col">
       <div class="fin-block"><h3>💰 Nguồn thu</h3>${rows(d.income,tIn,maxIn,'in')}<div class="fin-total">Tổng thu: <b>${vnd(tIn)}</b></div></div>
       <div class="fin-block"><h3>🧾 Khoản chi</h3>${rows(d.expense,tEx,maxEx,'ex')}<div class="fin-total">Tổng chi: <b>${vnd(tEx)}</b></div></div>
     </div>
-
-    <div class="fin-docs">
-      <div class="fd-h">📎 Tài liệu chi tiết</div>
-      <span class="fd">📄 Báo cáo thu – chi ${d.label} (PDF)</span>
-      <span class="fd">📄 Sao kê tài khoản quỹ bảo trì</span>
-      <span class="fd">📄 Chứng từ các khoản chi lớn</span>
+    <button class="detailbtn" id="finDetailBtn" onclick="loadFinDetail()">📄 Xem chi tiết từ báo cáo tài chính</button>
+    <div id="finDetail"></div>
+    <div class="note" style="margin-top:14px">Nguồn: Báo cáo 212/BC-BQT &amp; 0726/BC-BQL — thực hiện năm 07/2025 – 06/2026. Đơn vị: đồng.</div>`;
+}
+function loadFinDetail(){
+  const el=document.getElementById("finDetail"), b=document.getElementById("finDetailBtn");
+  if(el.innerHTML){ el.innerHTML=""; b.textContent="📄 Xem chi tiết từ báo cáo tài chính"; return; }
+  const d=RF.fin;
+  el.innerHTML=`
+    <div class="fin-block" style="margin-top:16px"><h3>📊 Ngân sách khoán &amp; cân đối</h3>
+      <div class="fund-row"><span>Ngân sách khoán theo hợp đồng</span><b>${vnd(d.incomeBudget)}</b></div>
+      <div class="fund-row"><span>Thực hiện nguồn thu</span><b>${vnd(d.incomeTotal)}</b></div>
+      <div class="fund-row"><span>Phụ cấp Ban Quản trị</span><b>${vnd(d.allowanceBQT)}</b></div>
+      <div class="fund-row"><span>Nộp Quỹ kết dư</span><b>${vnd(d.toReserve)}</b></div>
+      <div class="fund-row total"><span>Cân đối lũy kế đến kỳ báo cáo</span><b class="neg">− ${vnd(Math.abs(d.balanceCumulative))}</b></div>
     </div>
-    <div class="note" style="margin-top:14px">🔒 Số liệu trên là <b>minh hoạ (bản mẫu)</b>. Báo cáo tài chính chính thức do Ban Quản trị công bố định kỳ kèm chứng từ; website thật sẽ lấy dữ liệu từ hệ thống kế toán.</div>`;
+    <div class="fin-block" style="margin-top:16px"><h3>🙂 Mức độ hài lòng của cư dân qua các kỳ</h3>
+      ${d.survey.map(x=>`<div class="fund-row"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("")}
+      <div class="fund-note">Điểm hài lòng trung bình: ${d.surveyAvg}. Cao nhất: ${d.surveyHi}; cần cải thiện: ${d.surveyLo}.</div>
+    </div>
+    <div class="fin-docs"><div class="fd-h">📎 Tài liệu gốc</div><a class="fd" href="https://qr.scan.page/uploads/pdf/XZF5ad_19e0baf75b1e1e02.pdf" target="_blank" rel="noopener">📄 Toàn văn tài liệu Hội nghị 2026 (PDF)</a><a class="fd" href="https://qr.scan.page/uploads/pdf/XZF5ad_19e0baf75b1e1e02.pdf" target="_blank" rel="noopener">📄 Báo cáo 212/BC-BQT</a><a class="fd" href="https://qr.scan.page/uploads/pdf/XZF5ad_19e0baf75b1e1e02.pdf" target="_blank" rel="noopener">📄 Báo cáo 0726/BC-BQL</a></div>`;
+  b.textContent="Thu gọn chi tiết";
+}
+function renderFund(){
+  const d=RF.fund;
+  document.getElementById("fundBody").innerHTML=`
+    <div class="fin-cards">
+      <div class="fin-c inc"><div class="fc-l">Tổng khoản thu QBT</div><div class="fc-n">${vndShort(d.inflowTotal)} đ</div><div class="fc-sub">${vnd(d.inflowTotal)}</div></div>
+      <div class="fin-c exp"><div class="fc-l">Tổng khoản chi QBT</div><div class="fc-n">${vndShort(d.outflowTotal)} đ</div><div class="fc-sub">${vnd(d.outflowTotal)}</div></div>
+      <div class="fin-c fund"><div class="fc-l">Số dư QBT (30/6/2026)</div><div class="fc-n">${vndShort(d.balance)} đ</div><div class="fc-sub">${vnd(d.balance)}</div></div>
+      <div class="fin-c bal"><div class="fc-l">Đã thực nhận từ CĐT</div><div class="fc-n">${vndShort(d.receivedTotal)} đ</div><div class="fc-sub">${vnd(d.receivedTotal)}</div></div>
+    </div>
+    <div class="fund-box"><h3>🏦 Tiếp nhận quỹ bảo trì 2% (510 căn hộ)</h3>
+      ${d.received.map(x=>`<div class="fund-row"><span>${x[0]}</span><b class="${x[1]<0?'neg':''}">${x[1]<0?'− ':''}${vnd(Math.abs(x[1]))}</b></div>`).join("")}
+      <div class="fund-row total"><span>Quỹ bảo trì 510 căn sau bàn giao</span><b>${vnd(d.receivedSub510)}</b></div>
+      <div class="fund-row"><span>+ QBT khu thương mại Z756 (3.000m²)</span><b>${vnd(d.z756)}</b></div>
+      <div class="fund-row"><span>+ CĐT tạm ứng</span><b>${vnd(d.advance)}</b></div>
+      <div class="fund-row total"><span>Tổng đã thực nhận đến 30/6/2026</span><b>${vnd(d.receivedTotal)}</b></div>
+    </div>
+    <button class="detailbtn" id="fundDetailBtn" onclick="loadFundDetail()">📄 Xem chi tiết từ báo cáo quỹ bảo trì</button>
+    <div id="fundDetail"></div>
+    <div class="note" style="margin-top:14px">Nguồn: Báo cáo 213/BC-BQT — tiếp nhận, quản lý và sử dụng Quỹ bảo trì đến 30/6/2026. Đơn vị: đồng.</div>`;
+}
+function loadFundDetail(){
+  const el=document.getElementById("fundDetail"), b=document.getElementById("fundDetailBtn");
+  if(el.innerHTML){ el.innerHTML=""; b.textContent="📄 Xem chi tiết từ báo cáo quỹ bảo trì"; return; }
+  const d=RF.fund, maxSys=Math.max.apply(null,d.spendBySystem.map(x=>x[1]));
+  el.innerHTML=`
+    <div class="fin-block" style="margin-top:16px"><h3>📥 Cơ cấu khoản thu</h3>
+      ${d.inflow.map(x=>`<div class="fund-row"><span>${x[0]}</span><b>${vnd(x[1])}</b></div>`).join("")}
+      <div class="fund-row total"><span>Tổng khoản thu</span><b>${vnd(d.inflowTotal)}</b></div>
+    </div>
+    <div class="fin-block" style="margin-top:16px"><h3>📤 Khoản chi &amp; thực hiện theo kỳ</h3>
+      ${d.outflow.map(x=>`<div class="fund-row"><span>${x[0]}</span><b>${vnd(x[1])}</b></div>`).join("")}
+      <div class="fund-row total"><span>Tổng khoản chi</span><b>${vnd(d.outflowTotal)}</b></div>
+      <div class="fund-note" style="margin-top:10px">Thực chi quỹ bảo trì theo kỳ:</div>
+      ${d.spendByPeriod.map(x=>`<div class="fund-row"><span>${x[0]}</span><b>${vnd(x[1])}</b></div>`).join("")}
+    </div>
+    <div class="fin-block" style="margin-top:16px"><h3>🔧 Chi bảo trì 3 năm theo hệ thống</h3>
+      ${d.spendBySystem.map(x=>`<div class="fin-row"><div class="fr-top"><span class="fr-l">${x[0]}</span><span class="fr-v">${vnd(x[1])} <em>· ${x[2]}</em></span></div><div class="fr-bar"><i class="ex" style="width:${Math.round(x[1]/maxSys*100)}%"></i></div></div>`).join("")}
+    </div>
+    <div class="fin-block" style="margin-top:16px"><h3>🗓️ Ngân sách bảo trì (6 tháng cuối 2025 → Q3/2026)</h3>
+      <div class="fund-row"><span>Ngân sách đã thông qua</span><b>${vnd(d.budget.approved)}</b></div>
+      <div class="fund-row"><span>Đã thực hiện</span><b>${vnd(d.budget.done)} · ${d.budget.pct}</b></div>
+      <div class="fund-row"><span>Chưa sử dụng</span><b>${vnd(d.budget.unused)}</b></div>
+      <div class="fund-note" style="margin-top:8px">Theo nhóm — <b>bấm vào từng nhóm để xem chi tiết từng hạng mục</b> (đã dùng / ngân sách · %):</div>
+      ${d.budget.groups.map(g=>`<details class="bgrp"><summary><span class="bg-name">${g.name}</span><span class="bg-val">${vndShort(g.th)} / ${vndShort(g.ns)} đ · ${g.pct}</span></summary>${g.items.map(it=>`<div class="fund-row sub"><span>${it[0]}</span><b>${vndShort(it[2])} / ${vndShort(it[1])} đ · ${it[3]}</b></div>`).join("")}</details>`).join("")}
+    </div>
+    <div class="fin-block" style="margin-top:16px"><h3>💵 Hợp đồng tiền gửi theo ngân hàng</h3>
+      ${d.deposits.map(x=>`<div class="fund-row"><span>${x[0]} <em style="color:#8a8778">(${x[2]})</em></span><b>${vnd(x[1])}</b></div>`).join("")}
+      <div class="fund-row total"><span>Tổng tiền gửi có kỳ hạn</span><b>${vnd(d.depositsTotal)}</b></div>
+    </div>
+    <div class="fin-block" style="margin-top:16px"><h3>🧮 Số dư quỹ bảo trì chi tiết</h3>
+      ${d.balanceParts.map(x=>`<div class="fund-row"><span>${x[0]}</span><b>${vnd(x[1])}</b></div>`).join("")}
+      <div class="fund-row total"><span>Số dư đến 30/6/2026</span><b>${vnd(d.balance)}</b></div>
+    </div>
+    <div class="fin-block" style="margin-top:16px"><h3>💠 Quỹ kết dư vận hành</h3>
+      <div class="fund-row"><span>Thu quỹ kết dư</span><b>${vnd(d.reserve.income)}</b></div>
+      <div class="fund-row"><span>Chi quỹ kết dư</span><b>${vnd(d.reserve.expense)}</b></div>
+      <div class="fund-row total"><span>Số dư đến 30/6/2026</span><b>${vnd(d.reserve.balance)}</b></div>
+    </div>
+    <div class="fin-docs"><div class="fd-h">📎 Tài liệu gốc</div><a class="fd" href="https://qr.scan.page/uploads/pdf/XZF5ad_19e0baf75b1e1e02.pdf" target="_blank" rel="noopener">📄 Toàn văn tài liệu Hội nghị 2026 (PDF)</a><a class="fd" href="https://qr.scan.page/uploads/pdf/XZF5ad_19e0baf75b1e1e02.pdf" target="_blank" rel="noopener">📄 Báo cáo 213/BC-BQT</a><a class="fd" href="https://qr.scan.page/uploads/pdf/XZF5ad_19e0baf75b1e1e02.pdf" target="_blank" rel="noopener">📄 Bảng theo dõi hợp đồng tiền gửi</a><a class="fd" href="https://qr.scan.page/uploads/pdf/XZF5ad_19e0baf75b1e1e02.pdf" target="_blank" rel="noopener">📄 Báo cáo kiểm toán Quỹ bảo trì</a></div>`;
+  b.textContent="Thu gọn chi tiết";
 }
 function esc(s){return(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function timeAgo(t){const d=Math.floor((Date.now()-t)/1000);if(d<60)return"vừa xong";if(d<3600)return Math.floor(d/60)+" phút trước";if(d<86400)return Math.floor(d/3600)+" giờ trước";return Math.floor(d/86400)+" ngày trước";}
