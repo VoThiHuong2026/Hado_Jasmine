@@ -351,6 +351,21 @@ details[open] .tl-sum::after{transform:rotate(180deg);}
 .vc .big{font-size:20px;font-family:'Lora',serif;}
 .vhint{font-size:12.5px;color:#8a8778;text-align:center;margin-top:7px;}
 @media(max-width:400px){ .vcounts{flex-direction:column;} .vc.yes,.vc.no{width:100%;} }
+
+/* Compact stat tiles on mobile */
+@media(max-width:819px){
+  .stats{grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+  .stat{padding:9px 5px;min-height:62px;border-radius:12px;}
+  .stat .n{font-size:22px;margin-top:0;}
+  .stat .l{font-size:10.5px;line-height:1.2;margin-top:2px;}
+  .stat.active{box-shadow:0 0 0 2px rgba(28,81,56,.32);}
+}
+
+.fin-cards{grid-template-columns:repeat(auto-fit,minmax(160px,1fr));}
+.fin-c{display:flex;flex-direction:column;justify-content:center;min-height:98px;}
+.fin-c .fc-n{font-family:'Lora',serif;font-weight:700;font-size:23px;line-height:1.12;margin-top:5px;white-space:nowrap;font-variant-numeric:tabular-nums;}
+.fin-c .fc-sub{font-size:11.5px;color:#9a978d;margin-top:3px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+@media(max-width:480px){ .fin-cards{grid-template-columns:1fr 1fr;gap:10px;} .fin-c{min-height:88px;padding:13px 14px;} .fin-c .fc-n{font-size:20px;} .fin-c .fc-l{font-size:12px;} }
 </style>
 </head>
 <body>
@@ -538,15 +553,16 @@ const FINANCE={
    expense:[["Bảo vệ – an ninh",368000000],["Vệ sinh",262000000],["Điện – nước khu vực chung",231000000],["Bảo trì thang máy",140000000],["Cây xanh – cảnh quan",90000000],["An toàn PCCC",72000000],["Sửa chữa nhỏ",64000000],["Quản lý – hành chính",205000000]]}
 };
 function vnd(n){return n.toLocaleString('vi-VN')+" đ";}
+function vndShort(n){ const a=Math.abs(n); if(a>=1e9){ return (Math.round(n/1e9*100)/100).toLocaleString('vi-VN')+" tỷ"; } if(a>=1e6){ return Math.round(n/1e6).toLocaleString('vi-VN')+" triệu"; } return n.toLocaleString('vi-VN'); }
 function renderFund(){
   const sel=document.getElementById("mfPeriod"); if(!sel)return; const d=FINANCE[sel.value]; if(!d)return;
   const fundClose=d.fundOpen+d.fundInt-d.fundSpend;
   document.getElementById("fundBody").innerHTML=`
     <div class="fin-cards">
-      <div class="fin-c fund"><div class="fc-l">Số dư đầu kỳ</div><div class="fc-n">${vnd(d.fundOpen)}</div></div>
-      <div class="fin-c inc"><div class="fc-l">Lãi & phát sinh trong kỳ</div><div class="fc-n">+ ${vnd(d.fundInt)}</div></div>
-      <div class="fin-c exp"><div class="fc-l">Chi từ quỹ bảo trì</div><div class="fc-n">− ${vnd(d.fundSpend)}</div></div>
-      <div class="fin-c bal"><div class="fc-l">Số dư cuối kỳ</div><div class="fc-n">${vnd(fundClose)}</div></div>
+      <div class="fin-c fund"><div class="fc-l">Số dư đầu kỳ</div><div class="fc-n">${vndShort(d.fundOpen)} đ</div><div class="fc-sub">${vnd(d.fundOpen)}</div></div>
+      <div class="fin-c inc"><div class="fc-l">Lãi & phát sinh trong kỳ</div><div class="fc-n">+ ${vndShort(d.fundInt)} đ</div><div class="fc-sub">+ ${vnd(d.fundInt)}</div></div>
+      <div class="fin-c exp"><div class="fc-l">Chi từ quỹ bảo trì</div><div class="fc-n">− ${vndShort(d.fundSpend)} đ</div><div class="fc-sub">− ${vnd(d.fundSpend)}</div></div>
+      <div class="fin-c bal"><div class="fc-l">Số dư cuối kỳ</div><div class="fc-n">${vndShort(fundClose)} đ</div><div class="fc-sub">${vnd(fundClose)}</div></div>
     </div>
     <div class="fund-box">
       <h3>🏦 Diễn giải quỹ bảo trì 2% (tài khoản riêng)</h3>
@@ -576,10 +592,10 @@ function renderFinance(){
   const rows=(arr,tot,max,cls)=>arr.map(x=>`<div class="fin-row"><div class="fr-top"><span class="fr-l">${x[0]}</span><span class="fr-v">${vnd(x[1])} <em>· ${Math.round(x[1]/tot*100)}%</em></span></div><div class="fr-bar"><i class="${cls}" style="width:${Math.round(x[1]/max*100)}%"></i></div></div>`).join("");
   document.getElementById("finBody").innerHTML=`
     <div class="fin-cards">
-      <div class="fin-c fund"><div class="fc-l">Số dư quỹ bảo trì (cuối kỳ)</div><div class="fc-n">${vnd(fundClose)}</div></div>
-      <div class="fin-c inc"><div class="fc-l">Tổng thu vận hành</div><div class="fc-n">${vnd(tIn)}</div></div>
-      <div class="fin-c exp"><div class="fc-l">Tổng chi vận hành</div><div class="fc-n">${vnd(tEx)}</div></div>
-      <div class="fin-c bal"><div class="fc-l">Tồn quỹ vận hành (cuối kỳ)</div><div class="fc-n">${vnd(opClose)}</div></div>
+      <div class="fin-c fund"><div class="fc-l">Số dư quỹ bảo trì (cuối kỳ)</div><div class="fc-n">${vndShort(fundClose)} đ</div><div class="fc-sub">${vnd(fundClose)}</div></div>
+      <div class="fin-c inc"><div class="fc-l">Tổng thu vận hành</div><div class="fc-n">${vndShort(tIn)} đ</div><div class="fc-sub">${vnd(tIn)}</div></div>
+      <div class="fin-c exp"><div class="fc-l">Tổng chi vận hành</div><div class="fc-n">${vndShort(tEx)} đ</div><div class="fc-sub">${vnd(tEx)}</div></div>
+      <div class="fin-c bal"><div class="fc-l">Tồn quỹ vận hành (cuối kỳ)</div><div class="fc-n">${vndShort(opClose)} đ</div><div class="fc-sub">${vnd(opClose)}</div></div>
     </div>
     <div class="fin-2col">
       <div class="fin-block"><h3>💰 Nguồn thu</h3>${rows(d.income,tIn,maxIn,'in')}<div class="fin-total">Tổng thu: <b>${vnd(tIn)}</b></div></div>
@@ -668,7 +684,7 @@ function cardHTML(it,idx,rank){
           <div id="stepA${idx}"><div class="vin"><input id="ph${idx}" placeholder="Số điện thoại hoặc email" maxlength="60"><button onclick="sendOtp(${idx})">Gửi mã OTP</button></div></div>
           <div id="stepB${idx}" style="display:none"><div class="otpdemo" id="otpdemo${idx}"></div><div class="vin"><input id="otp${idx}" placeholder="Nhập mã OTP 6 số" maxlength="6" inputmode="numeric"><button onclick="confirmVote(${idx})">Xác nhận</button></div></div>
           <div class="vmsg" id="vm${idx}"></div>
-          <div class="note">🔒 <b>Chỉ số điện thoại/email đã đăng ký chính chủ mới được bầu chọn.</b> Mỗi lượt cần xác thực bằng mã OTP để tránh trùng lặp. <b>Bản mẫu:</b> mã OTP hiển thị ngay để thử (SĐT chính chủ thử: 0909 000 001); website thật kiểm tra theo danh sách chính chủ và gửi OTP qua SMS/email.</div>
+          <div class="note">🔒 <b>Chỉ số điện thoại/email đã đăng ký chính chủ mới được bầu chọn.</b> Cần mã OTP từ điện thoại hoặc email nếu chưa đăng nhập.</div>
         </div>
         ${adminCtl}
       </div>
